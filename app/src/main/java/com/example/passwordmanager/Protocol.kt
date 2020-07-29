@@ -4,6 +4,7 @@ object Protocol {
     // note. account using 1000 ~ 1999
     const val REQUEST_CODE_LOGIN = 1000
     const val REQUEST_CODE_JOIN = 1001
+    const val REQUEST_CODE_MY = 1002
 
     // note.
     const val ACCOUNT = "ACCOUNT"

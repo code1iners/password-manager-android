@@ -7,13 +7,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.helpers.PreferencesManager
+import com.example.passwordmanager.adapters.AccountAdapter
+import com.example.passwordmanager.models.AccountModel
 import com.example.passwordmanager.ui.LoginActivity
+import com.example.passwordmanager.ui.MyActivity
 import java.lang.Exception
 import kotlin.system.exitProcess
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
         val TAG = MainActivity::class.simpleName
         lateinit var activity: Activity
@@ -22,18 +30,46 @@ class MainActivity : AppCompatActivity() {
         var isUser: Boolean = false
     }
 
-
     private var backKeyPressedTime: Long = 0
     private lateinit var toast: Toast
     private lateinit var context: Context
+
+    // note. widgets
+    private lateinit var mainActivity__body__list: RecyclerView
+    private lateinit var mainActivity__footer__add_btn: Button
+    private lateinit var mainActivity__header__item_mySetting: ImageButton
+
+    // note. item list
+    private lateinit var accountList: ArrayList<AccountModel>
+    private lateinit var accountAdapter: AccountAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // note. init
         init()
+        // note. check has arguments
         checkArgs()
+        // note. if no has user info, showing login view
         if (!isUser) displayLoginView()
+        // note. get user account list
+        getAccountList()
+    }
+
+    private fun getAccountList() {
+        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+
+        // note. for test
+        val model = AccountModel()
+        model.id = "아이디임"
+        model.pw = "비밀번호임"
+        model.nickname = "닉네임임"
+        model.title = "타이틀임"
+
+        accountList.add(model)
+//        accountAdapter.notifyDataSetChanged()
+        accountAdapter.notifyItemChanged(0)
     }
 
     private fun checkArgs() {
@@ -59,6 +95,44 @@ class MainActivity : AppCompatActivity() {
 
         // note. init etc..
         initEtc()
+        // note. init widgets
+        initWidgets()
+        // note. init adapters
+        initAdapters()
+    }
+
+    private fun initWidgets() {
+        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+
+        // note. header
+        mainActivity__header__item_mySetting = findViewById(R.id.mainActivity__header__item_mySetting)
+        // note. body
+        mainActivity__body__list = findViewById(R.id.mainActivity__body__list)
+        // note. footer
+        mainActivity__footer__add_btn = findViewById(R.id.mainActivity__footer__add_btn)
+
+        // note. set listeners
+        // note. header
+        mainActivity__header__item_mySetting.setOnClickListener(this)
+        // note. footer
+        mainActivity__footer__add_btn.setOnClickListener(this)
+    }
+
+    private fun initAdapters() {
+        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+
+        accountList = ArrayList()
+        Log.i(TAG, "accountList : $accountList")
+        accountAdapter = AccountAdapter()
+        Log.i(TAG, "accountAdapter : $accountAdapter")
+        accountAdapter.setList(accountList)
+
+        // note. init layout manager
+        val linearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        // note set recyclerview
+        mainActivity__body__list.layoutManager = linearLayoutManager
+        mainActivity__body__list.adapter = accountAdapter
     }
 
     private fun initEtc() {
@@ -115,5 +189,20 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {e.printStackTrace()}
 
         return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onClick(v: View) {
+        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+
+        when (v.id) {
+            R.id.mainActivity__header__item_mySetting -> {
+                val myActivity = Intent(context, MyActivity::class.java)
+                startActivityForResult(myActivity, Protocol.REQUEST_CODE_MY)
+            }
+
+            R.id.mainActivity__footer__add_btn -> {
+                Log.w(TAG, "mainActivity__footer__add_btn_OnClick")
+            }
+        }
     }
 }
