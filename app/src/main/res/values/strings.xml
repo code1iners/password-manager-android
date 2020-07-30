@@ -11,6 +11,7 @@
     <string name="pw">PW</string>
 
     <string name="id_why_use_email">아이디는 추후 계정을 잃어버렸을 경우, 다시 아이디를 찾을 때 사용됩니다.</string>
+    <string name="nickname_saved">닉네임이 정상적으로 저장되었습니다.</string>
     <string name="confirm">확인</string>
     <string name="my_account">My Account</string>
     <string name="item">Item</string>
@@ -18,5 +19,6 @@
     <string name="add">Add</string>
     <string name="save">Save</string>
     <string name="sign_out">Sign Out</string>
+    <string name="my_profile">My Profile</string>
 
 </resources>

@@ -17,4 +17,5 @@ object Protocol {
     const val COMMAND = "COMMAND"
     const val SIGN_OUT = "SIGN_OUT"
     const val APP_TERMINATE = "APP_TERMINATE"
+    const val NICKNAME = "NICKNAME"
 }

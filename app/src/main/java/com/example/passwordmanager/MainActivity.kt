@@ -10,6 +10,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         lateinit var activity: Activity
         var clientId: String? = null
         var clientPw: String? = null
+        var clientNickname: String? = null
         var isUser: Boolean = true
     }
 
@@ -35,6 +37,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var context: Context
 
     // note. widgets
+    // note. user info
+    private lateinit var mainActivity__header__item_nickname: TextView
+
+    // note. body
     private lateinit var mainActivity__body__list: RecyclerView
     private lateinit var mainActivity__footer__add_btn: Button
     private lateinit var mainActivity__header__item_mySetting: ImageButton
@@ -53,16 +59,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         checkArgs()
         // note. if no has user info, showing login view
         if (!isUser) displayLoginView()
-        // note. get user info
-        getUserInfo()
+        // note. apply info
+        applyView()
         // note. get user account list
         getAccountList()
     }
 
-    private fun getUserInfo() {
+    private fun applyView() {
         Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
 
-
+        mainActivity__header__item_nickname.text = clientNickname
     }
 
     private fun getAccountList() {
@@ -85,9 +91,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val manager = PreferencesManager(activity, Protocol.ACCOUNT)
         clientId = manager[Protocol.CLIENT_ID]
-        clientPw = manager.get(Protocol.CLIENT_PW)
+        clientPw = manager[Protocol.CLIENT_PW]
+        clientNickname = manager[Protocol.NICKNAME]
 
-        Log.i(TAG, "clientId : $clientId, clientPw : $clientPw")
+        Log.i(TAG, "clientId : $clientId, clientPw : $clientPw, clientNickname : $clientNickname")
         if (clientId == null || clientPw == null) isUser = false
         Log.i(TAG, "isUser : $isUser")
     }
@@ -115,6 +122,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         // note. header
         mainActivity__header__item_mySetting = findViewById(R.id.mainActivity__header__item_mySetting)
+        mainActivity__header__item_nickname = findViewById(R.id.mainActivity__header__item_nickname)
         // note. body
         mainActivity__body__list = findViewById(R.id.mainActivity__body__list)
         // note. footer
@@ -184,6 +192,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         manager.remove(Protocol.CLIENT_PW)
 
                         displayLoginView()
+                    } else {
+
                     }
                 }
 
