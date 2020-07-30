@@ -9,7 +9,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
-import com.example.helpers.PreferencesManager
 import com.example.passwordmanager.MainActivity
 import com.example.passwordmanager.Protocol
 import com.example.passwordmanager.R
@@ -60,7 +59,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        Log.w(MainActivity.TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
         try {
             Log.i(TAG, "keyCode : $keyCode, event : $event, repeatCount : ${event?.repeatCount}")
             if (keyCode == KeyEvent.KEYCODE_BACK && event?.repeatCount == 0) {
@@ -77,7 +76,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 // note. click again
                 if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
                     val intent = Intent()
-                    intent.putExtra(Protocol.INTENT_RESULT, Protocol.EXIT)
+                    intent.putExtra(Protocol.COMMAND, Protocol.APP_TERMINATE)
                     setResult(RESULT_OK, intent)
                     finish()
                     toast.cancel()
@@ -113,7 +112,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             when (requestCode) {
                 Protocol.REQUEST_CODE_JOIN -> {
                     val intent = Intent()
-                    intent.putExtra(Protocol.INTENT_RESULT, Protocol.REQUEST_CODE_JOIN)
+                    intent.putExtra(Protocol.COMMAND, Protocol.REQUEST_CODE_JOIN)
                     setResult(RESULT_OK, intent)
                     finish()
                 }

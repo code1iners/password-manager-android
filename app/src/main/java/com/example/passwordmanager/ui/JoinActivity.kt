@@ -117,7 +117,7 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
         manager.add(Protocol.CLIENT_PW, joinActivityBody__input_pw_edit.text.toString())
 
         val intent = Intent()
-        intent.putExtra(Protocol.INTENT_RESULT, Protocol.REQUEST_CODE_JOIN)
+        intent.putExtra(Protocol.COMMAND, Protocol.REQUEST_CODE_JOIN)
         setResult(RESULT_OK, intent)
         finish()
     }

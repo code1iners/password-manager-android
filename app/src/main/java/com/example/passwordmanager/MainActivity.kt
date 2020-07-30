@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         lateinit var activity: Activity
         var clientId: String? = null
         var clientPw: String? = null
-        var isUser: Boolean = false
+        var isUser: Boolean = true
     }
 
     private var backKeyPressedTime: Long = 0
@@ -53,8 +53,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         checkArgs()
         // note. if no has user info, showing login view
         if (!isUser) displayLoginView()
+        // note. get user info
+        getUserInfo()
         // note. get user account list
         getAccountList()
+    }
+
+    private fun getUserInfo() {
+        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+
+
     }
 
     private fun getAccountList() {
@@ -80,7 +88,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         clientPw = manager.get(Protocol.CLIENT_PW)
 
         Log.i(TAG, "clientId : $clientId, clientPw : $clientPw")
-        if (!clientId.isNullOrEmpty() || !clientPw.isNullOrEmpty()) isUser = true
+        if (clientId == null || clientPw == null) isUser = false
+        Log.i(TAG, "isUser : $isUser")
     }
 
     private fun displayLoginView() {
@@ -154,12 +163,31 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 Protocol.REQUEST_CODE_LOGIN -> {
+                    val command = data?.getStringExtra(Protocol.COMMAND)
+                    Log.i(TAG, "command : $command")
 
+                    // note. terminate application
+                    if (command == Protocol.APP_TERMINATE) finish()
                 }
 
                 Protocol.REQUEST_CODE_JOIN -> {
 
                 }
+
+                Protocol.REQUEST_CODE_MY -> {
+                    val command = data?.getStringExtra(Protocol.COMMAND)
+                    if (command == Protocol.SIGN_OUT) {
+                        val mainActivity = activity
+
+                        val manager = PreferencesManager(mainActivity, Protocol.ACCOUNT)
+                        manager.remove(Protocol.CLIENT_ID)
+                        manager.remove(Protocol.CLIENT_PW)
+
+                        displayLoginView()
+                    }
+                }
+
+                Protocol.REQUEST_CODE_EXIT -> finish()
             }
         }
     }
