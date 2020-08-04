@@ -1,12 +1,9 @@
 package com.example.passwordmanager.models
 
 import android.util.Log
+import timber.log.Timber
 
 class UserModel {
-    companion object {
-        val TAG = UserModel::class.simpleName
-    }
-
     lateinit var nickname: String
     lateinit var id: String
     lateinit var pw: String
@@ -18,10 +15,10 @@ class UserModel {
     }
 
     fun logging() {
-        Log.w(TAG, object: Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object: Any(){}.javaClass.enclosingMethod!!.name)
 
-        Log.i(TAG, "nickname : $nickname")
-        Log.i(TAG, "id : $id")
-        Log.i(TAG, "pw : $pw")
+        Timber.i( "nickname : $nickname")
+        Timber.i( "id : $id")
+        Timber.i( "pw : $pw")
     }
 }

@@ -1,11 +1,12 @@
 package com.example.passwordmanager
 
 object Protocol {
-    // note. account using 1000 ~ 1999
+    // note. request code
     const val REQUEST_CODE_LOGIN = 1000
     const val REQUEST_CODE_JOIN = 1001
     const val REQUEST_CODE_MY = 1002
-    const val REQUEST_CODE_EXIT = 1002
+    const val REQUEST_CODE_EXIT = 1003
+    const val REQUEST_CODE_ADD_ACCOUNT = 1004
 
     // note.
     const val NULL = "null"

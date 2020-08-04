@@ -11,23 +11,20 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.passwordmanager.R
 import com.example.passwordmanager.models.AccountModel
+import timber.log.Timber
 
 class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>() {
-    companion object {
-        val TAG = AccountAdapter::class.simpleName
-    }
-
     private lateinit var context: Context
     private lateinit var accountList: ArrayList<AccountModel>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountAdapter.CustomViewHolder {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
         val v = LayoutInflater.from(parent.context).inflate(R.layout.account_list_item, parent, false)
         return CustomViewHolder(v)
     }
 
     override fun onBindViewHolder(h: AccountAdapter.CustomViewHolder, p: Int) {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
         val m = accountList[p]
 
         applyView(h, m)
@@ -39,20 +36,20 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>() {
     fun setContext(context: Context) { this.context = context }
 
     private fun applyView(h: AccountAdapter.CustomViewHolder, m: AccountModel) {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         applyViewText(h, m)
         applyViewImage(h, m)
     }
 
     private fun applyViewImage(h: AccountAdapter.CustomViewHolder, m: AccountModel) {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
 
     }
 
     private fun applyViewText(h: AccountAdapter.CustomViewHolder, m: AccountModel) {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         h.accountListItem__header__title.text = m.title
         h.accountListItem__body__text__id.text = m.id
@@ -85,7 +82,7 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>() {
         override fun onClick(v: View) {
             when (v.id) {
                 R.id.accountListItem__body__option__modify -> {
-                    Log.w(TAG, "accountListItem__option__modify_OnClick")
+                    Timber.w( "accountListItem__option__modify_OnClick")
 
                 }
             }

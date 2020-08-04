@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
@@ -17,14 +16,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.helpers.PreferencesManager
 import com.example.passwordmanager.adapters.AccountAdapter
 import com.example.passwordmanager.models.AccountModel
+import com.example.passwordmanager.ui.AccountAddActivity
 import com.example.passwordmanager.ui.LoginActivity
 import com.example.passwordmanager.ui.MyActivity
+import timber.log.Timber
 import java.lang.Exception
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
-        val TAG = MainActivity::class.simpleName
         lateinit var activity: Activity
         var clientId: String? = null
         var clientPw: String? = null
@@ -66,19 +66,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun applyView() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         mainActivity__header__item_nickname.text = clientNickname
     }
 
     private fun getAccountList() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         // note. for test
         val model = AccountModel()
         model.id = "아이디임"
         model.pw = "비밀번호임"
-        model.nickname = "닉네임임"
+        model.hint = "힌트임"
         model.title = "타이틀임"
 
         accountList.add(model)
@@ -87,28 +87,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun checkArgs() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         val manager = PreferencesManager(activity, Protocol.ACCOUNT)
         clientId = manager[Protocol.CLIENT_ID]
         clientPw = manager[Protocol.CLIENT_PW]
         clientNickname = manager[Protocol.NICKNAME]
 
-        Log.i(TAG, "clientId : $clientId, clientPw : $clientPw, clientNickname : $clientNickname")
+        Timber.i("clientId : $clientId, clientPw : $clientPw, clientNickname : $clientNickname")
         if (clientId == null || clientPw == null) isUser = false
-        Log.i(TAG, "isUser : $isUser")
+        Timber.i("isUser : $isUser")
     }
 
     private fun displayLoginView() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         val loginView = Intent(context, LoginActivity::class.java)
         startActivityForResult(loginView, Protocol.REQUEST_CODE_LOGIN)
     }
 
     private fun init() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
+        // note. init libraries
+        initLibraries()
         // note. init etc..
         initEtc()
         // note. init widgets
@@ -117,8 +119,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         initAdapters()
     }
 
+    private fun initLibraries() {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        // note. timber
+        initLibrariesTimber()
+    }
+
+    private fun initLibrariesTimber() {
+        Timber.plant(Timber.DebugTree())
+    }
+
     private fun initWidgets() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         // note. header
         mainActivity__header__item_mySetting = findViewById(R.id.mainActivity__header__item_mySetting)
@@ -136,12 +148,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initAdapters() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         accountList = ArrayList()
-        Log.i(TAG, "accountList : $accountList")
+        Timber.i("accountList : $accountList")
         accountAdapter = AccountAdapter()
-        Log.i(TAG, "accountAdapter : $accountAdapter")
+        Timber.i("accountAdapter : $accountAdapter")
         accountAdapter.setList(accountList)
 
         // note. init layout manager
@@ -153,7 +165,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initEtc() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         // note. activity
         activity = this
@@ -165,14 +177,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
-        Log.i(TAG, "requestCode : $requestCode, resultCode : $resultCode, data : $data")
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.i("requestCode : $requestCode, resultCode : $resultCode, data : $data")
 
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 Protocol.REQUEST_CODE_LOGIN -> {
                     val command = data?.getStringExtra(Protocol.COMMAND)
-                    Log.i(TAG, "command : $command")
+                    Timber.i("command : $command")
 
                     // note. terminate application
                     if (command == Protocol.APP_TERMINATE) finish()
@@ -203,9 +215,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
         try {
-            Log.i(LoginActivity.TAG, "keyCode : $keyCode, event : $event, repeatCount : ${event?.repeatCount}")
+            Timber.i( "keyCode : $keyCode, event : $event, repeatCount : ${event?.repeatCount}")
             if (keyCode == KeyEvent.KEYCODE_BACK && event?.getRepeatCount() == 0) {
 
                 // note. 2000 milliseconds = 2sec
@@ -230,7 +242,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         when (v.id) {
             R.id.mainActivity__header__item_mySetting -> {
@@ -239,7 +251,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.mainActivity__footer__add_btn -> {
-                Log.w(TAG, "mainActivity__footer__add_btn_OnClick")
+                Timber.w("mainActivity__footer__add_btn_OnClick")
+                val accountAddActivity = Intent(context, AccountAddActivity::class.java)
+                startActivityForResult(accountAddActivity, Protocol.REQUEST_CODE_ADD_ACCOUNT)
             }
         }
     }

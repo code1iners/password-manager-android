@@ -39,9 +39,12 @@ dependencies {
 //    // note. For control over item selection of both touch and mouse driven selection
 //    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
     // note. helpers
-    implementation 'com.github.takeMyHands:helpers-android:0.1.13'
+    implementation 'com.github.takeMyHands:helpers-android:0.1.16'
     // note. snack bar
     implementation 'com.android.support:design:29.0.0'
-
+    // note. timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+    // note. three ten
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
 
 }

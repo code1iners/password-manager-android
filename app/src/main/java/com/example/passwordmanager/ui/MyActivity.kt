@@ -13,13 +13,10 @@ import com.example.passwordmanager.MainActivity
 import com.example.passwordmanager.Protocol
 import com.example.passwordmanager.R
 import com.google.android.material.snackbar.Snackbar
+import timber.log.Timber
 import java.lang.Exception
 
 class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorActionListener {
-    companion object {
-        val TAG = MyActivity::class.simpleName
-    }
-
     // note. widgets
     lateinit var myActivity__header__status_back: ImageButton
     lateinit var myActivity__header__username: TextView
@@ -38,10 +35,10 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
     }
 
     private fun applyView() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         val savedName: String? = PreferencesManager(MainActivity.activity, Protocol.ACCOUNT).get(Protocol.NICKNAME)
-        Log.i(TAG, "savedName : $savedName")
+        Timber.i( "savedName : $savedName")
         if (savedName != null) {
             // note. apply username
             myActivity__header__username.text = savedName
@@ -51,14 +48,14 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
     }
 
     private fun init() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         // note. init widgets
         initWidgets()
     }
 
     private fun initWidgets() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         myActivity__header__status_back = findViewById(R.id.myActivity__header__status_back)
         myActivity__header__username = findViewById(R.id.myActivity__header__username)
@@ -75,9 +72,9 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
         try {
-            Log.i(LoginActivity.TAG, "keyCode : $keyCode, event : $event, repeatCount : ${event?.repeatCount}")
+            Timber.i( "keyCode : $keyCode, event : $event, repeatCount : ${event?.repeatCount}")
             if (keyCode == KeyEvent.KEYCODE_BACK && event?.repeatCount == 0) {
 
 //                val myActivityResult = Intent()
@@ -95,7 +92,7 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
 
 
     override fun onClick(v: View) {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
         when (v.id) {
             R.id.myActivity__header__status_back -> {
                 finish()
@@ -127,8 +124,8 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
     }
 
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
-        Log.w(TAG, object: Any(){}.javaClass.enclosingMethod!!.name)
-        Log.i(JoinActivity.TAG, "v : ${v.id}, actionId : $actionId, event : $event")
+        Timber.w(object: Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.i("v : ${v.id}, actionId : $actionId, event : $event")
         try {
             when (v.id) {
                 R.id.myActivity__body__nickname_edit -> {

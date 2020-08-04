@@ -12,14 +12,11 @@ import android.widget.Toast
 import com.example.passwordmanager.MainActivity
 import com.example.passwordmanager.Protocol
 import com.example.passwordmanager.R
+import timber.log.Timber
 import java.lang.Exception
 import kotlin.system.exitProcess
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
-    companion object {
-        val TAG = LoginActivity::class.simpleName
-    }
-
     private var backKeyPressedTime: Long = 0
     private lateinit var toast: Toast
     private lateinit var context: Context
@@ -36,7 +33,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun init() {
-        Log.w(MainActivity.TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         // note. init context
         context = applicationContext
@@ -47,7 +44,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initWidgets() {
-        Log.w(MainActivity.TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         // note. assignment
         loginActivityBody__input_submit_btn = findViewById(R.id.loginActivityBody__input_submit_btn)
@@ -59,9 +56,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
         try {
-            Log.i(TAG, "keyCode : $keyCode, event : $event, repeatCount : ${event?.repeatCount}")
+            Timber.i( "keyCode : $keyCode, event : $event, repeatCount : ${event?.repeatCount}")
             if (keyCode == KeyEvent.KEYCODE_BACK && event?.repeatCount == 0) {
 
                 // note. 2000 milliseconds = 2sec
@@ -91,11 +88,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             R.id.loginActivityBody__input_submit_btn -> {
-                Log.w(TAG, "loginActivityBody__input_submit_btn_OnClick")
+                Timber.w( "loginActivityBody__input_submit_btn_OnClick")
             }
 
             R.id.loginActivityBody__input_option_btn_signUp -> {
-                Log.w(TAG, "loginActivityBody__input_option_btn_signUp")
+                Timber.w( "loginActivityBody__input_option_btn_signUp")
 
                 val joinView = Intent(context, JoinActivity::class.java)
                 startActivityForResult(joinView, Protocol.REQUEST_CODE_JOIN)
@@ -105,8 +102,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.w(MainActivity.TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
-        Log.i(MainActivity.TAG, "requestCode : $requestCode, resultCode : $resultCode, data : $data")
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.i("requestCode : $requestCode, resultCode : $resultCode, data : $data")
 
         if (resultCode == RESULT_OK) {
             when (requestCode) {

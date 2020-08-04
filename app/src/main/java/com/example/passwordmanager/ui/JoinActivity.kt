@@ -20,12 +20,9 @@ import com.example.passwordmanager.MainActivity
 import com.example.passwordmanager.Protocol
 import com.example.passwordmanager.R
 import com.google.android.material.snackbar.Snackbar
+import timber.log.Timber
 
 class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorActionListener {
-    companion object {
-        val TAG = JoinActivity::class.simpleName
-    }
-
     // note. widgets
     private lateinit var joinActivityBody__input_submit_btn: Button
     // note. body
@@ -48,7 +45,7 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
     }
 
     private fun notification() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         val snack = Snackbar.make(findViewById(R.id.joinActivity__container),
             R.string.id_why_use_email, Snackbar.LENGTH_INDEFINITE)
@@ -57,7 +54,7 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
     }
 
     private fun init() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         // note. etc..
         initEtcs()
@@ -66,7 +63,7 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
     }
 
     private fun initEtcs() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         // note. activity
         activity = this
@@ -79,7 +76,7 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
     }
 
     private fun initWidgets() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         // note. assignment
         joinActivityBody__input_submit_btn = findViewById(R.id.joinActivityBody__input_submit_btn)
@@ -93,11 +90,11 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
     }
 
     override fun onClick(v: View) {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         when (v.id) {
             R.id.joinActivityBody__input_submit_btn -> {
-                Log.w(TAG, "joinActivityBody__input_submit_btn_OnClick")
+                Timber.w( "joinActivityBody__input_submit_btn_OnClick")
 
                 // note. check data validation
                 if (submitDataValidation()) return
@@ -108,7 +105,7 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
     }
 
     private fun createNewAccount() {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         val mainActivity = MainActivity.activity
 
@@ -123,13 +120,13 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
     }
 
     private fun submitDataValidation(): Boolean {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         val id : String = joinActivityBody__input_id_edit.text.toString()
         val pw : String = joinActivityBody__input_pw_edit.text.toString()
         val pw2 : String = joinActivityBody__input_pw2_edit.text.toString()
         val delayTime : Long = 500
-        Log.i(TAG, "id : $id, pw : $pw, pw2 : $pw2")
+        Timber.i( "id : $id, pw : $pw, pw2 : $pw2")
 
         when {
             id.isEmpty() -> {
@@ -172,8 +169,8 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
     }
 
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
-        Log.w(TAG, object:Any(){}.javaClass.enclosingMethod!!.name)
-        Log.i(TAG, "v : ${v.id}, actionId : $actionId, event : $event")
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.i( "v : ${v.id}, actionId : $actionId, event : $event")
 
         // note. key down
         Keypad(activity).down(v)
