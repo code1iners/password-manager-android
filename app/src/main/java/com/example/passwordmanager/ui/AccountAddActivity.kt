@@ -1,18 +1,41 @@
 package com.example.passwordmanager.ui
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.KeyEvent
 import android.view.View
-import android.widget.ImageButton
-import androidx.core.os.bundleOf
+import android.view.inputmethod.EditorInfo
+import android.widget.*
+import com.example.helpers.Keypad
+import com.example.helpers.PreferencesManager
+import com.example.passwordmanager.Protocol
 import com.example.passwordmanager.R
+import com.example.passwordmanager.helpers.AccountInfoManager
+import com.example.passwordmanager.models.AccountModel
+import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 
-class AccountAddActivity : AppCompatActivity(), View.OnClickListener {
+class AccountAddActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClickListener, TextView.OnEditorActionListener {
+    private lateinit var activity: Activity
+    private lateinit var context: Context
+    private lateinit var snack: Snackbar
     // note. widgets
-    lateinit var accountAddActivity__header__status_back: ImageButton
+    private lateinit var accountAddActivity__layout: RelativeLayout
+    // note. header
+    private lateinit var accountAddActivity__header__status_title: TextView
+    private lateinit var accountAddActivity__header__status_back: ImageButton
+    // note. body
+    private lateinit var accountAddActivity__body__account_title_edit: EditText
+    private lateinit var accountAddActivity__body__account_id_edit: EditText
+    private lateinit var accountAddActivity__body__account_pw_edit: EditText
+    private lateinit var accountAddActivity__body__account_hint_edit: EditText
+    // note. footer
+    private lateinit var accountAddActivity__footer__submit_btn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,23 +47,131 @@ class AccountAddActivity : AppCompatActivity(), View.OnClickListener {
     private fun init() {
         Timber.w(object: Any(){}.javaClass.enclosingMethod!!.name)
 
+        // note. init etc
+        initVars()
         // note. init widgets
         initWidgets()
+    }
+
+    private fun initVars() {
+        Timber.w(object: Any(){}.javaClass.enclosingMethod!!.name)
+
+        activity = this
+        context = this
     }
 
     private fun initWidgets() {
         Timber.w(object: Any(){}.javaClass.enclosingMethod!!.name)
 
-        // note. header
-        accountAddActivity__header__status_back = findViewById(R.id.accountAddActivity__header__status_back)    // note. back
+        // note. assignment
+        initWidgetsAssignment()
+        // note. listeners
         initWidgetsListener()
+    }
+
+    private fun initWidgetsAssignment() {
+        Timber.w(object: Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            accountAddActivity__layout = findViewById(R.id.accountAddActivity__layout)    // note. layout
+            // note. header
+            accountAddActivity__header__status_title = findViewById(R.id.accountAddActivity__header__status_title)    // note. back
+            accountAddActivity__header__status_back = findViewById(R.id.accountAddActivity__header__status_back)    // note. back
+            // note. body
+            accountAddActivity__body__account_title_edit = findViewById(R.id.accountAddActivity__body__account_title_edit)    // note. back
+            accountAddActivity__body__account_id_edit = findViewById(R.id.accountAddActivity__body__account_id_edit)    // note. back
+            accountAddActivity__body__account_pw_edit = findViewById(R.id.accountAddActivity__body__account_pw_edit)    // note. back
+            accountAddActivity__body__account_hint_edit = findViewById(R.id.accountAddActivity__body__account_hint_edit)    // note. back
+            // note. footer
+            accountAddActivity__footer__submit_btn = findViewById(R.id.accountAddActivity__footer__submit_btn)    // note. create
+        } catch (e: Exception) {e.printStackTrace()}
     }
 
     private fun initWidgetsListener() {
         Timber.w(object: Any(){}.javaClass.enclosingMethod!!.name)
         try {
+            // note. header
             accountAddActivity__header__status_back.setOnClickListener(this)
+            accountAddActivity__header__status_title.setOnClickListener(this)
+            accountAddActivity__header__status_title.setOnLongClickListener(this)
+            // note. body
+            accountAddActivity__body__account_title_edit.setOnEditorActionListener(this)
+            accountAddActivity__body__account_id_edit.setOnEditorActionListener(this)
+            accountAddActivity__body__account_pw_edit.setOnEditorActionListener(this)
+            accountAddActivity__body__account_hint_edit.setOnEditorActionListener(this)
+            // note. footer
+            accountAddActivity__footer__submit_btn.setOnClickListener(this)
         } catch (e: Exception) {e.printStackTrace()}
+    }
+
+    private fun createNewAccount() {
+        Timber.w(object: Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            val title = accountAddActivity__body__account_title_edit.text.toString()
+            val id = accountAddActivity__body__account_id_edit.text.toString()
+            val pw = accountAddActivity__body__account_pw_edit.text.toString()
+            val hint = accountAddActivity__body__account_hint_edit.text.toString()
+            val created = LocalDateTime.now()
+            if (!accountInfoIsNull(title, id, pw, hint)) return
+
+            Timber.i("title:$title, id:$id, pw:$pw, hint:$hint, created:$created")
+            val model = AccountModel()
+            model.title = title
+            model.id = id
+            model.pw = pw
+            model.hint = hint
+            model.created = created
+            model.updated = created
+
+            // note. save user's device
+            AccountInfoManager.create(activity, model)
+            // note. model serialize
+            val serializedModel = Gson().toJson(model)
+            // note. activity exit
+            val accountAddActivityResult = Intent()
+            accountAddActivityResult.putExtra(Protocol.COMMAND, Protocol.SUCCESS)
+//            accountAddActivityResult.putExtra(Protocol.ARGUMENTS, serializedModel)
+            setResult(RESULT_OK, accountAddActivityResult)
+            finish()
+        } catch (e: Exception) {e.printStackTrace()}
+    }
+
+    private fun accountInfoIsNull(title: String, id: String, pw: String, hint: String): Boolean {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            if (title.isEmpty()) {
+                accountAddActivity__body__account_title_edit.requestFocus()
+                Keypad(activity).up(accountAddActivity__body__account_title_edit)
+                snack = Snackbar.make(accountAddActivity__layout, "계정 이름을 입력해주세요.", Snackbar.LENGTH_LONG)
+                snack.setAction("확인") { snack.dismiss() }
+                snack.show()
+                return false
+            }
+            if (id.isEmpty()) {
+                accountAddActivity__body__account_id_edit.requestFocus()
+                Keypad(activity).up(accountAddActivity__body__account_id_edit)
+                snack = Snackbar.make(accountAddActivity__layout, "아이디를 입력해주세요.", Snackbar.LENGTH_LONG)
+                snack.setAction("확인") { snack.dismiss() }
+                snack.show()
+                return false
+            }
+            if (pw.isEmpty()) {
+                accountAddActivity__body__account_pw_edit.requestFocus()
+                Keypad(activity).up(accountAddActivity__body__account_pw_edit)
+                snack = Snackbar.make(accountAddActivity__layout, "비밀번호를 입력해주세요.", Snackbar.LENGTH_LONG)
+                snack.setAction("확인") { snack.dismiss() }
+                snack.show()
+                return false
+            }
+            if (hint.isEmpty()) {
+                accountAddActivity__body__account_hint_edit.requestFocus()
+                Keypad(activity).up(accountAddActivity__body__account_hint_edit)
+                snack = Snackbar.make(accountAddActivity__layout, "계정 설명 입력해주세요.", Snackbar.LENGTH_LONG)
+                snack.setAction("확인") { snack.dismiss() }
+                snack.show()
+                return false
+            }
+        } catch (e: Exception) {e.printStackTrace()}
+        return true
     }
 
     override fun onClick(v: View) {
@@ -50,7 +181,63 @@ class AccountAddActivity : AppCompatActivity(), View.OnClickListener {
                 // note. header
                 // note. back
                 R.id.accountAddActivity__header__status_back -> { finish() }
+                R.id.accountAddActivity__header__status_title -> {
+                    Timber.i("ACCOUNT_OBJECT Check ${Protocol.SUCCESS}")
+                    PreferencesManager(activity, Protocol.ACCOUNT_DATA).check()
+                }
+                // note. create new account
+                R.id.accountAddActivity__footer__submit_btn -> {
+                    Timber.w("accountAddActivity__footer__submit_btn_OnClick")
+                    createNewAccount()
+                }
             }
         } catch (e: Exception) {e.printStackTrace()}
+    }
+
+    override fun onLongClick(v: View): Boolean {
+        Timber.w(object: Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            when (v.id) {
+                R.id.accountAddActivity__header__status_title -> {
+                    Timber.i("ACCOUNT_OBJECT Delete ${Protocol.SUCCESS}")
+                    PreferencesManager(activity, Protocol.ACCOUNT_DATA).remove(Protocol.ACCOUNT_LIST)
+                }
+            }
+        } catch (e: Exception) {e.printStackTrace()}
+        return true
+    }
+
+    override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
+        Timber.w(object: Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            Timber.i("v:${resources.getResourceEntryName(v.id)}_OnAction, actionId:$actionId, event:${event}")
+            when (v.id) {
+                R.id.accountAddActivity__body__account_title_edit -> {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        accountAddActivity__body__account_id_edit.requestFocus()
+                    }
+                }
+
+                R.id.accountAddActivity__body__account_id_edit -> {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        accountAddActivity__body__account_pw_edit.requestFocus()
+                    }
+                }
+
+                R.id.accountAddActivity__body__account_pw_edit -> {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        accountAddActivity__body__account_hint_edit.requestFocus()
+                    }
+                }
+
+                R.id.accountAddActivity__body__account_hint_edit -> {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        createNewAccount()
+                    }
+                }
+
+            }
+        } catch (e: Exception) {e.printStackTrace()}
+        return false
     }
 }

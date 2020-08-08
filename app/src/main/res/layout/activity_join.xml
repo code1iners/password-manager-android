@@ -56,6 +56,7 @@
 
             <RelativeLayout
                 android:id="@+id/joinActivityBody__input_id_container"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -98,7 +99,7 @@
 
                 <TextView
                     android:id="@+id/joinActivityBody__input_pw_order"
-                    android:text="2"
+                    android:text="1"
                     android:textSize="17sp"
                     android:textColor="@color/black"
                     android:layout_centerVertical="true"
@@ -135,7 +136,7 @@
 
                 <TextView
                     android:id="@+id/joinActivityBody__input_pw2_order"
-                    android:text="3"
+                    android:text="2"
                     android:textSize="17sp"
                     android:textColor="@color/black"
                     android:layout_centerVertical="true"
@@ -180,24 +181,25 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/joinActivityBody__input_submit_container"
-                android:layout_below="@+id/joinActivityBody__input_pw2_container"
-                android:layout_marginTop="50dp"
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/joinActivityFooter__input_submit_container"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/joinActivityFooter__input_submit_btn"
+                android:text="@string/sign_up"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/gradation_sign_up"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/joinActivityBody__input_submit_btn"
-                    android:text="@string/sign_up"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:background="@drawable/gradation_sign_up"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"/>
-
-            </RelativeLayout>
+                android:layout_height="60dp"/>
 
         </RelativeLayout>
 

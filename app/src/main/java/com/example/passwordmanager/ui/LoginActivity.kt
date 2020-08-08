@@ -1,5 +1,6 @@
 package com.example.passwordmanager.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,8 +8,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import com.example.helpers.PreferencesManager
 import com.example.passwordmanager.MainActivity
 import com.example.passwordmanager.Protocol
 import com.example.passwordmanager.R
@@ -16,14 +21,17 @@ import timber.log.Timber
 import java.lang.Exception
 import kotlin.system.exitProcess
 
-class LoginActivity : AppCompatActivity(), View.OnClickListener {
+class LoginActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorActionListener {
+    private lateinit var activity: Activity
     private var backKeyPressedTime: Long = 0
     private lateinit var toast: Toast
     private lateinit var context: Context
 
     // note. widgets
-    private lateinit var loginActivityBody__input_submit_btn: Button
-    private lateinit var loginActivityBody__input_option_btn_signUp: Button
+    private lateinit var loginActivity__header_title: TextView
+    private lateinit var loginActivity__body__input_pw_edit: EditText
+    private lateinit var loginActivity__footer__btn1_signIn: Button
+    private lateinit var loginActivity__footer__btn1_signUp: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +44,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         // note. init context
+        activity = this
         context = applicationContext
         // note. init toast
         toast = Toast(context)
@@ -46,13 +55,17 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private fun initWidgets() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
+        loginActivity__header_title = findViewById(R.id.loginActivity__header_title)
         // note. assignment
-        loginActivityBody__input_submit_btn = findViewById(R.id.loginActivityBody__input_submit_btn)
-        loginActivityBody__input_option_btn_signUp = findViewById(R.id.loginActivityBody__input_option_btn_signUp)
+        loginActivity__body__input_pw_edit = findViewById(R.id.loginActivity__body__input_pw_edit)
+        loginActivity__footer__btn1_signIn = findViewById(R.id.loginActivity__footer__btn1_signIn)
+        loginActivity__footer__btn1_signUp = findViewById(R.id.loginActivity__footer__btn1_signUp)
 
         // note. init listeners
-        loginActivityBody__input_submit_btn.setOnClickListener(this)
-        loginActivityBody__input_option_btn_signUp.setOnClickListener(this)
+        loginActivity__header_title.setOnClickListener(this)
+        loginActivity__body__input_pw_edit.setOnEditorActionListener(this)
+        loginActivity__footer__btn1_signIn.setOnClickListener(this)
+        loginActivity__footer__btn1_signUp.setOnClickListener(this)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -87,15 +100,31 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.loginActivityBody__input_submit_btn -> {
-                Timber.w( "loginActivityBody__input_submit_btn_OnClick")
+            R.id.loginActivity__header_title -> {
+                PreferencesManager(activity, Protocol.ACCOUNT).check()
             }
 
-            R.id.loginActivityBody__input_option_btn_signUp -> {
-                Timber.w( "loginActivityBody__input_option_btn_signUp")
+            R.id.loginActivity__footer__btn1_signIn -> {
+                Timber.w( "loginActivity__footer__btn1_signIn_OnClick")
+                val pw = PreferencesManager(activity, Protocol.ACCOUNT)[Protocol.CLIENT_PW]
+                if (!pw.isNullOrEmpty()) {
+                    Timber.i("Password is exist! (pw:$pw)")
+                    val inputPassword = loginActivity__body__input_pw_edit.text.toString()
+
+                    if (pw == inputPassword) {
+                        finish()
+                    }
+                } else {
+                    Timber.w("Password is not exist!")
+                }
+            }
+
+            R.id.loginActivity__footer__btn1_signUp -> {
+                Timber.w( "loginActivity__footer__btn1_signUp")
 
                 val joinView = Intent(context, JoinActivity::class.java)
-                startActivityForResult(joinView, Protocol.REQUEST_CODE_JOIN)
+
+                startActivityForResult(joinView, Protocol.REQUEST_CODE_JOIN_ACTIVITY)
             }
         }
     }
@@ -107,13 +136,28 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         if (resultCode == RESULT_OK) {
             when (requestCode) {
-                Protocol.REQUEST_CODE_JOIN -> {
+                Protocol.REQUEST_CODE_JOIN_ACTIVITY -> {
                     val intent = Intent()
-                    intent.putExtra(Protocol.COMMAND, Protocol.REQUEST_CODE_JOIN)
+                    intent.putExtra(Protocol.COMMAND, Protocol.SIGN_UP_SUCCESS)
                     setResult(RESULT_OK, intent)
                     finish()
                 }
             }
         }
+    }
+
+    override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        when (v.id) {
+            R.id.loginActivity__body__input_pw_edit -> {
+                when (actionId) {
+                    EditorInfo.IME_ACTION_DONE -> {
+                        loginActivity__footer__btn1_signIn.performClick()
+                    }
+                }
+                return true
+            }
+        }
+        return false
     }
 }

@@ -51,9 +51,12 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>() {
     private fun applyViewText(h: AccountAdapter.CustomViewHolder, m: AccountModel) {
         Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
+        // note. body
         h.accountListItem__header__title.text = m.title
         h.accountListItem__body__text__id.text = m.id
         h.accountListItem__body__text__pw.text = m.pw
+        // note. footer
+        h.accountListItem__footer__hint.text = m.hint
     }
 
     inner class CustomViewHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
@@ -63,6 +66,7 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>() {
         var accountListItem__body__image_thumbnail: ImageView
         var accountListItem__body__text__id: TextView
         var accountListItem__body__text__pw: TextView
+        var accountListItem__footer__hint: TextView
         var accountListItem__body__option__modify: Button
 
         init {
@@ -73,6 +77,7 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>() {
             accountListItem__body__image_thumbnail = v.findViewById(R.id.accountListItem__body__image_thumbnail)
             accountListItem__body__text__id = v.findViewById(R.id.accountListItem__body__text__id)
             accountListItem__body__text__pw = v.findViewById(R.id.accountListItem__body__text__pw)
+            accountListItem__footer__hint = v.findViewById(R.id.accountListItem__footer__hint)
             accountListItem__body__option__modify = v.findViewById(R.id.accountListItem__body__option__modify)
 
             // note. init listeners

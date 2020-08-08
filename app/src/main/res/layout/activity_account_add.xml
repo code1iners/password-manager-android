@@ -3,6 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/accountAddActivity__layout"
+    android:layout_marginTop="40dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.AccountAddActivity">
@@ -10,13 +12,14 @@
     <RelativeLayout
         android:id="@+id/accountAddActivity__container"
         android:paddingHorizontal="20dp"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/accountAddActivity__header__status"
-            android:layout_marginTop="20dp"
             android:paddingVertical="10dp"
+            android:background="@drawable/border_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -41,151 +44,232 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/accountAddActivity__body__account_container"
+        <ScrollView
             android:layout_below="@+id/accountAddActivity__header__status"
-            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/accountAddActivity__body__account_container"
+                android:paddingBottom="100dp"
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/accountAddActivity__body__account_title_container"
+                    android:background="@drawable/border_5"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/accountAddActivity__body__account_title_icon"
+                        android:src="@color/black"
+                        android:scaleType="fitXY"
+                        android:background="@null"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+
+                    <TextView
+                        android:id="@+id/accountAddActivity__body__account_title_label"
+                        android:text="@string/title"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/accountAddActivity__body__account_title_icon"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/accountAddActivity__body__account_title_edit"
+                        android:textSize="15sp"
+                        android:textColor="@color/sexyBlack"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/accountAddActivity__body__account_title_label"
+                        android:layout_marginStart="10dp"
+                        android:paddingVertical="10dp"
+                        android:paddingHorizontal="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/accountAddActivity__body__account_id_container"
+                    android:background="@drawable/border_5"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_below="@+id/accountAddActivity__body__account_title_container"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/accountAddActivity__body__account_id_icon"
+                        android:src="@color/black"
+                        android:scaleType="fitXY"
+                        android:background="@null"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+
+                    <TextView
+                        android:id="@+id/accountAddActivity__body__account_id_label"
+                        android:text="@string/id"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/accountAddActivity__body__account_id_icon"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/accountAddActivity__body__account_id_edit"
+                        android:textSize="15sp"
+                        android:textColor="@color/sexyBlack"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/accountAddActivity__body__account_id_label"
+                        android:layout_marginStart="10dp"
+                        android:paddingVertical="10dp"
+                        android:paddingHorizontal="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/accountAddActivity__body__account_pw_container"
+                    android:background="@drawable/border_5"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_below="@+id/accountAddActivity__body__account_id_container"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/accountAddActivity__body__account_pw_icon"
+                        android:src="@color/black"
+                        android:scaleType="fitXY"
+                        android:background="@null"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+
+                    <TextView
+                        android:id="@+id/accountAddActivity__body__account_pw_label"
+                        android:text="@string/pw"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/accountAddActivity__body__account_pw_icon"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/accountAddActivity__body__account_pw_edit"
+                        android:textSize="15sp"
+                        android:textColor="@color/sexyBlack"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/accountAddActivity__body__account_pw_label"
+                        android:layout_marginStart="10dp"
+                        android:paddingVertical="10dp"
+                        android:paddingHorizontal="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/accountAddActivity__body__account_hint_container"
+                    android:background="@drawable/border_5"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_below="@+id/accountAddActivity__body__account_pw_container"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/accountAddActivity__body__account_hint_icon"
+                        android:src="@color/black"
+                        android:scaleType="fitXY"
+                        android:background="@null"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+
+                    <TextView
+                        android:id="@+id/accountAddActivity__body__account_hint_label"
+                        android:text="계정 설명"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/accountAddActivity__body__account_hint_icon"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/accountAddActivity__body__account_hint_edit"
+                        android:textSize="15sp"
+                        android:textColor="@color/sexyBlack"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/accountAddActivity__body__account_hint_label"
+                        android:layout_marginStart="10dp"
+                        android:paddingVertical="10dp"
+                        android:paddingHorizontal="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/accountAddActivity__footer__submit_container"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:id="@+id/accountAddActivity__body__account_title_container"
-                android:background="@drawable/border_5"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp"
+            <Button
+                android:id="@+id/accountAddActivity__footer__submit_btn"
+                android:text="@string/create"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@drawable/gradation_confirm_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/accountAddActivity__body__account_title_icon"
-                    android:src="@color/black"
-                    android:scaleType="fitXY"
-                    android:background="@null"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"/>
-
-                <TextView
-                    android:id="@+id/accountAddActivity__body__account_title_label"
-                    android:text="@string/title"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/accountAddActivity__body__account_title_icon"
-                    android:layout_marginStart="10dp"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"/>
-
-                <EditText
-                    android:id="@+id/accountAddActivity__body__account_title_edit"
-                    android:textSize="15sp"
-                    android:textColor="@color/sexyBlack"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/accountAddActivity__body__account_title_label"
-                    android:layout_marginStart="10dp"
-                    android:paddingVertical="10dp"
-                    android:paddingHorizontal="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/accountAddActivity__body__account_id_container"
-                android:background="@drawable/border_5"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp"
-                android:layout_below="@+id/accountAddActivity__body__account_title_container"
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/accountAddActivity__body__account_id_icon"
-                    android:src="@color/black"
-                    android:scaleType="fitXY"
-                    android:background="@null"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"/>
-
-                <TextView
-                    android:id="@+id/accountAddActivity__body__account_id_label"
-                    android:text="@string/id"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/accountAddActivity__body__account_id_icon"
-                    android:layout_marginStart="10dp"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"/>
-
-                <EditText
-                    android:id="@+id/accountAddActivity__body__account_id_edit"
-                    android:textSize="15sp"
-                    android:textColor="@color/sexyBlack"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/accountAddActivity__body__account_id_label"
-                    android:layout_marginStart="10dp"
-                    android:paddingVertical="10dp"
-                    android:paddingHorizontal="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/accountAddActivity__body__account_pw_container"
-                android:background="@drawable/border_5"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp"
-                android:layout_below="@+id/accountAddActivity__body__account_id_container"
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/accountAddActivity__body__account_pw_icon"
-                    android:src="@color/black"
-                    android:scaleType="fitXY"
-                    android:background="@null"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"/>
-
-                <TextView
-                    android:id="@+id/accountAddActivity__body__account_pw_label"
-                    android:text="@string/pw"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/accountAddActivity__body__account_pw_icon"
-                    android:layout_marginStart="10dp"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"/>
-
-                <EditText
-                    android:id="@+id/accountAddActivity__body__account_pw_edit"
-                    android:textSize="15sp"
-                    android:textColor="@color/sexyBlack"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/accountAddActivity__body__account_pw_label"
-                    android:layout_marginStart="10dp"
-                    android:paddingVertical="10dp"
-                    android:paddingHorizontal="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </RelativeLayout>
+                android:layout_height="wrap_content"/>
 
         </RelativeLayout>
 

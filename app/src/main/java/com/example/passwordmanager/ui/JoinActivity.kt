@@ -24,11 +24,12 @@ import timber.log.Timber
 
 class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorActionListener {
     // note. widgets
-    private lateinit var joinActivityBody__input_submit_btn: Button
     // note. body
-    private lateinit var joinActivityBody__input_id_edit: EditText
+//    private lateinit var joinActivityBody__input_id_edit: EditText
     private lateinit var joinActivityBody__input_pw_edit: EditText
     private lateinit var joinActivityBody__input_pw2_edit: EditText
+    // note. footer
+    private lateinit var joinActivityFooter__input_submit_btn: Button
     // note. etc..
     private lateinit var activity: Activity
     private lateinit var context: Context
@@ -48,7 +49,7 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         val snack = Snackbar.make(findViewById(R.id.joinActivity__container),
-            R.string.id_why_use_email, Snackbar.LENGTH_INDEFINITE)
+            R.string.join_alarm, Snackbar.LENGTH_INDEFINITE)
         snack.show()
         snack.setAction(R.string.confirm) { snack.dismiss() }
     }
@@ -79,13 +80,13 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
         Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         // note. assignment
-        joinActivityBody__input_submit_btn = findViewById(R.id.joinActivityBody__input_submit_btn)
-        joinActivityBody__input_id_edit = findViewById(R.id.joinActivityBody__input_id_edit)
+        joinActivityFooter__input_submit_btn = findViewById(R.id.joinActivityFooter__input_submit_btn)
+//        joinActivityBody__input_id_edit = findViewById(R.id.joinActivityBody__input_id_edit)
         joinActivityBody__input_pw_edit = findViewById(R.id.joinActivityBody__input_pw_edit)
         joinActivityBody__input_pw2_edit = findViewById(R.id.joinActivityBody__input_pw2_edit)
 
         // note. init listeners
-        joinActivityBody__input_submit_btn.setOnClickListener(this)
+        joinActivityFooter__input_submit_btn.setOnClickListener(this)
         joinActivityBody__input_pw2_edit.setOnEditorActionListener(this)
     }
 
@@ -93,8 +94,8 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
         Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
         when (v.id) {
-            R.id.joinActivityBody__input_submit_btn -> {
-                Timber.w( "joinActivityBody__input_submit_btn_OnClick")
+            R.id.joinActivityFooter__input_submit_btn -> {
+                Timber.w( "joinActivityFooter__input_submit_btn_OnClick")
 
                 // note. check data validation
                 if (submitDataValidation()) return
@@ -110,11 +111,10 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
         val mainActivity = MainActivity.activity
 
         val manager = PreferencesManager(mainActivity, Protocol.ACCOUNT)
-        manager.add(Protocol.CLIENT_ID, joinActivityBody__input_id_edit.text.toString())
         manager.add(Protocol.CLIENT_PW, joinActivityBody__input_pw_edit.text.toString())
 
         val intent = Intent()
-        intent.putExtra(Protocol.COMMAND, Protocol.REQUEST_CODE_JOIN)
+        intent.putExtra(Protocol.COMMAND, Protocol.SIGN_UP_SUCCESS)
         setResult(RESULT_OK, intent)
         finish()
     }
@@ -122,27 +122,27 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
     private fun submitDataValidation(): Boolean {
         Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
-        val id : String = joinActivityBody__input_id_edit.text.toString()
+//        val id : String = joinActivityBody__input_id_edit.text.toString()
         val pw : String = joinActivityBody__input_pw_edit.text.toString()
         val pw2 : String = joinActivityBody__input_pw2_edit.text.toString()
         val delayTime : Long = 500
-        Timber.i( "id : $id, pw : $pw, pw2 : $pw2")
+        Timber.i( "pw : $pw, pw2 : $pw2")
 
         when {
-            id.isEmpty() -> {
-                joinActivityBody__input_id_edit.requestFocus()
-                toast = Toast.makeText(context, "\'아이디\' 를 입력해주세요.", Toast.LENGTH_SHORT)
-                handler.postDelayed({Keypad(this).up(joinActivityBody__input_id_edit)}, delayTime)
-                toast.show()
-                return true
-            }
-            !id.contains("@") -> {
-                joinActivityBody__input_id_edit.requestFocus()
-                toast = Toast.makeText(context, "\'아이디\' 는 이메일 형식으로 입력해주세요.", Toast.LENGTH_SHORT)
-                handler.postDelayed({Keypad(this).up(joinActivityBody__input_id_edit)}, delayTime)
-                toast.show()
-                return true
-            }
+//            id.isEmpty() -> {
+//                joinActivityBody__input_id_edit.requestFocus()
+//                toast = Toast.makeText(context, "\'아이디\' 를 입력해주세요.", Toast.LENGTH_SHORT)
+//                handler.postDelayed({Keypad(this).up(joinActivityBody__input_id_edit)}, delayTime)
+//                toast.show()
+//                return true
+//            }
+//            !id.contains("@") -> {
+//                joinActivityBody__input_id_edit.requestFocus()
+//                toast = Toast.makeText(context, "\'아이디\' 는 이메일 형식으로 입력해주세요.", Toast.LENGTH_SHORT)
+//                handler.postDelayed({Keypad(this).up(joinActivityBody__input_id_edit)}, delayTime)
+//                toast.show()
+//                return true
+//            }
             pw.isEmpty() -> {
                 joinActivityBody__input_pw_edit.requestFocus()
                 toast = Toast.makeText(context, "\'비밀번호\' 를 입력해주세요.", Toast.LENGTH_SHORT)
@@ -179,7 +179,7 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
             R.id.joinActivityBody__input_pw2_edit -> {
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
-                        joinActivityBody__input_submit_btn.performClick()
+                        joinActivityFooter__input_submit_btn.performClick()
                     }
                 }
             }

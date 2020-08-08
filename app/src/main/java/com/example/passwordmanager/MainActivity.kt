@@ -3,7 +3,6 @@ package com.example.passwordmanager
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -11,27 +10,23 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.helpers.PreferencesManager
 import com.example.passwordmanager.adapters.AccountAdapter
+import com.example.passwordmanager.helpers.AccountInfoManager
 import com.example.passwordmanager.models.AccountModel
 import com.example.passwordmanager.ui.AccountAddActivity
 import com.example.passwordmanager.ui.LoginActivity
 import com.example.passwordmanager.ui.MyActivity
+import com.google.gson.Gson
+import com.jakewharton.threetenabp.AndroidThreeTen
 import timber.log.Timber
-import java.lang.Exception
 import kotlin.system.exitProcess
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
-    companion object {
-        lateinit var activity: Activity
-        var clientId: String? = null
-        var clientPw: String? = null
-        var clientNickname: String? = null
-        var isUser: Boolean = true
-    }
 
+class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var backKeyPressedTime: Long = 0
     private lateinit var toast: Toast
     private lateinit var context: Context
@@ -62,7 +57,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         // note. apply info
         applyView()
         // note. get user account list
-        getAccountList()
+        refreshAccountList()
     }
 
     private fun applyView() {
@@ -71,31 +66,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         mainActivity__header__item_nickname.text = clientNickname
     }
 
-    private fun getAccountList() {
+    private fun refreshAccountList() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
-
-        // note. for test
-        val model = AccountModel()
-        model.id = "아이디임"
-        model.pw = "비밀번호임"
-        model.hint = "힌트임"
-        model.title = "타이틀임"
-
-        accountList.add(model)
-//        accountAdapter.notifyDataSetChanged()
-        accountAdapter.notifyItemChanged(0)
+        try {
+            val storedList: ArrayList<AccountModel> = AccountInfoManager.get(activity)!!
+            accountList.clear()
+            for ((idx, model) in storedList.withIndex()) {
+                accountList.add(model)
+                accountAdapter.notifyItemChanged(idx)
+            }
+        } catch (e: Exception) {e.printStackTrace()}
     }
 
     private fun checkArgs() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         val manager = PreferencesManager(activity, Protocol.ACCOUNT)
-        clientId = manager[Protocol.CLIENT_ID]
         clientPw = manager[Protocol.CLIENT_PW]
         clientNickname = manager[Protocol.NICKNAME]
 
-        Timber.i("clientId : $clientId, clientPw : $clientPw, clientNickname : $clientNickname")
-        if (clientId == null || clientPw == null) isUser = false
+        Timber.i("clientPw : $clientPw, clientNickname : $clientNickname")
+        if (clientPw == null) isUser = false
         Timber.i("isUser : $isUser")
     }
 
@@ -103,7 +94,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         val loginView = Intent(context, LoginActivity::class.java)
-        startActivityForResult(loginView, Protocol.REQUEST_CODE_LOGIN)
+        startActivityForResult(loginView, Protocol.REQUEST_CODE_LOGIN_ACTIVITY)
     }
 
     private fun init() {
@@ -123,10 +114,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
         // note. timber
         initLibrariesTimber()
+        initLibrariesThreeTen()
     }
 
     private fun initLibrariesTimber() {
         Timber.plant(Timber.DebugTree())
+    }
+
+    private fun initLibrariesThreeTen() {
+        AndroidThreeTen.init(this)
     }
 
     private fun initWidgets() {
@@ -179,39 +175,71 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
         Timber.i("requestCode : $requestCode, resultCode : $resultCode, data : $data")
+        try {
+            if (resultCode == RESULT_OK) {
+                when (requestCode) {
+                    Protocol.REQUEST_CODE_LOGIN_ACTIVITY -> {
+                        val command = data?.getStringExtra(Protocol.COMMAND)
+                        Timber.i("command : $command")
 
-        if (resultCode == RESULT_OK) {
-            when (requestCode) {
-                Protocol.REQUEST_CODE_LOGIN -> {
-                    val command = data?.getStringExtra(Protocol.COMMAND)
-                    Timber.i("command : $command")
-
-                    // note. terminate application
-                    if (command == Protocol.APP_TERMINATE) finish()
-                }
-
-                Protocol.REQUEST_CODE_JOIN -> {
-
-                }
-
-                Protocol.REQUEST_CODE_MY -> {
-                    val command = data?.getStringExtra(Protocol.COMMAND)
-                    if (command == Protocol.SIGN_OUT) {
-                        val mainActivity = activity
-
-                        val manager = PreferencesManager(mainActivity, Protocol.ACCOUNT)
-                        manager.remove(Protocol.CLIENT_ID)
-                        manager.remove(Protocol.CLIENT_PW)
-
-                        displayLoginView()
-                    } else {
+                        // note. terminate application
+                        when (command) {
+                            Protocol.APP_TERMINATE -> {finish()}
+                        }
 
                     }
-                }
 
-                Protocol.REQUEST_CODE_EXIT -> finish()
+                    Protocol.REQUEST_CODE_JOIN_ACTIVITY -> {
+
+                    }
+
+                    Protocol.REQUEST_CODE_MY_ACTIVITY -> {
+                        val command = data?.getStringExtra(Protocol.COMMAND)
+                        when (command) {
+                            Protocol.SIGN_OUT -> {
+                                val mainActivity = activity
+
+                                val manager = PreferencesManager(mainActivity, Protocol.ACCOUNT)
+                                manager.remove(Protocol.NICKNAME)
+                                manager.remove(Protocol.CLIENT_PW)
+
+                                // note. update(init) text
+                                mainActivity__header__item_nickname.text = Protocol.EMPTY
+
+                                displayLoginView()
+                            }
+
+                            Protocol.SUCCESS -> {
+                                val command = data.getStringExtra(Protocol.COMMAND)
+                                when (command) {
+                                    Protocol.SUCCESS -> {
+                                        val args = data.getStringExtra(Protocol.ARGUMENTS)
+                                        if (!args.isNullOrEmpty()) {
+                                            // note. set nickname
+                                            mainActivity__header__item_nickname.text = args
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Protocol.REQUEST_CODE_ADD_ACCOUNT -> {
+                        val command = data?.getStringExtra(Protocol.COMMAND)
+                        Timber.i("command:$command")
+                        when (command) {
+                            Protocol.SUCCESS -> {
+                                try {
+                                    refreshAccountList()
+                                } catch (e:Exception) {e.printStackTrace()}
+                            }
+                        }
+                    }
+
+                    Protocol.REQUEST_CODE_EXIT -> finish()
+                }
             }
-        }
+        } catch (e: Exception) {e.printStackTrace()}
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -247,7 +275,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         when (v.id) {
             R.id.mainActivity__header__item_mySetting -> {
                 val myActivity = Intent(context, MyActivity::class.java)
-                startActivityForResult(myActivity, Protocol.REQUEST_CODE_MY)
+                startActivityForResult(myActivity, Protocol.REQUEST_CODE_MY_ACTIVITY)
             }
 
             R.id.mainActivity__footer__add_btn -> {
@@ -256,5 +284,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivityForResult(accountAddActivity, Protocol.REQUEST_CODE_ADD_ACCOUNT)
             }
         }
+    }
+
+    companion object {
+        lateinit var activity: Activity
+        var clientPw: String? = null
+        var clientNickname: String? = null
+        var isUser: Boolean = true
     }
 }

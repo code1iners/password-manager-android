@@ -1,20 +1,16 @@
 package com.example.passwordmanager.models
 
 import android.util.Log
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 
 class AccountModel {
-    init {
-        Timber.i( "created : need working later")
-        Timber.i( "updated : need working later")
-    }
-
     lateinit var title: String
     lateinit var hint: String
     lateinit var id: String
     lateinit var pw: String
-    lateinit var created: String
-    lateinit var updated: String
+    lateinit var created: LocalDateTime
+    lateinit var updated: LocalDateTime
 
     fun setAll(title: String?, hint: String?, id: String?, pw: String?) {
         this.title = title.toString()

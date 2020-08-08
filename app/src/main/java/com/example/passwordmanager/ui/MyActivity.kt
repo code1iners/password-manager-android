@@ -1,9 +1,12 @@
 package com.example.passwordmanager.ui
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -17,6 +20,9 @@ import timber.log.Timber
 import java.lang.Exception
 
 class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorActionListener {
+    // note. other varse
+    lateinit var context: Context
+    lateinit var activity: Activity
     // note. widgets
     lateinit var myActivity__header__status_back: ImageButton
     lateinit var myActivity__header__username: TextView
@@ -50,6 +56,8 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
     private fun init() {
         Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
+        context = applicationContext
+        activity = this
         // note. init widgets
         initWidgets()
     }
@@ -77,10 +85,7 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
             Timber.i( "keyCode : $keyCode, event : $event, repeatCount : ${event?.repeatCount}")
             if (keyCode == KeyEvent.KEYCODE_BACK && event?.repeatCount == 0) {
 
-//                val myActivityResult = Intent()
-//                myActivityResult.putExtra(Protocol.INTENT_RESULT, Protocol.MY_ACTIVITY)
-//                setResult(RESULT_OK, myActivityResult)
-                finish()
+                myActivity__header__status_back.performClick()
 
                 return true
             }
@@ -95,15 +100,32 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
         Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
         when (v.id) {
             R.id.myActivity__header__status_back -> {
+                val myActivityResult = Intent()
+                myActivityResult.putExtra(Protocol.COMMAND, Protocol.SUCCESS)
+                myActivityResult.putExtra(Protocol.ARGUMENTS, myActivity__body__nickname_edit.text.toString())
+                setResult(RESULT_OK, myActivityResult)
                 finish()
             }
 
             R.id.myActivity__footer__btn_signOut -> {
 
-                val myActivityResult = Intent()
-                setResult(RESULT_OK, myActivityResult)
-                myActivityResult.putExtra(Protocol.COMMAND, Protocol.SIGN_OUT)
-                finish()
+                val builder = AlertDialog.Builder(activity)
+                builder
+                    .setTitle("로그아웃")
+                    .setMessage("로그아웃 시 기존 저장된 데이터는 모두 소실됩니다. 진행하시겠습니까?")
+                    .setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
+                        Timber.w("YES, interface:$dialogInterface, i:$i")
+                        val myActivityResult = Intent()
+                        setResult(RESULT_OK, myActivityResult)
+                        myActivityResult.putExtra(Protocol.COMMAND, Protocol.SIGN_OUT)
+                        finish()
+                    }
+                    .setNegativeButton("취소") { dialogInterface: DialogInterface, i: Int ->
+                        Timber.w("NO, interface:$dialogInterface, i:$i")
+                    }
+
+                val dialog = builder.create()
+                dialog.show()
             }
 
             R.id.myActivity__footer__btn_save -> {

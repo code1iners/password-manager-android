@@ -16,13 +16,13 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/loginActivityHeader__container"
+        android:id="@+id/loginActivity__header_container"
         android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/loginActivityHeader__title"
+            android:id="@+id/loginActivity__header_title"
             android:text="Sign in"
             android:textSize="60sp"
             android:textStyle="bold"
@@ -32,10 +32,10 @@
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:id="@+id/loginActivityHeader__subtitle"
+            android:id="@+id/loginActivity__header_subtitle"
             android:text="Sign In Manager Your Account"
             android:textSize="26sp"
-            android:layout_below="@+id/loginActivityHeader__title"
+            android:layout_below="@+id/loginActivity__header_title"
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -43,34 +43,35 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/loginActivityBody__container"
-        android:layout_below="@+id/loginActivityHeader__container"
+        android:id="@+id/loginActivity__body__container"
+        android:layout_below="@+id/loginActivity__header_container"
         android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:id="@+id/loginActivityBody__input_id_container"
+            android:id="@+id/loginActivity__body__input_id_container"
+            android:visibility="gone"
             android:layout_marginVertical="10dp"
             android:layout_marginHorizontal="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/loginActivityBody__input_id_icon"
+                android:id="@+id/loginActivity__body__input_id_icon"
                 android:layout_centerVertical="true"
                 android:src="@drawable/user_unfocus"
                 android:layout_width="40dp"
                 android:layout_height="40dp"/>
 
             <EditText
-                android:id="@+id/loginActivityBody__input_id_edit"
+                android:id="@+id/loginActivity__body__input_id_edit"
                 android:hint="@string/username"
                 android:textSize="24sp"
                 android:textColor="@color/black"
                 android:background="@null"
                 android:inputType="textEmailAddress"
-                android:layout_toEndOf="@+id/loginActivityBody__input_id_icon"
+                android:layout_toEndOf="@+id/loginActivity__body__input_id_icon"
                 android:layout_centerVertical="true"
                 android:paddingStart="30dp"
                 android:layout_width="match_parent"
@@ -79,45 +80,53 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/loginActivityBody__input_pw_container"
-            android:layout_below="@+id/loginActivityBody__input_id_container"
+            android:id="@+id/loginActivity__body__input_pw_container"
+            android:layout_below="@+id/loginActivity__body__input_id_container"
             android:layout_marginVertical="10dp"
             android:layout_marginHorizontal="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/loginActivityBody__input_pw_icon"
+                android:id="@+id/loginActivity__body__input_pw_icon"
                 android:src="@drawable/lock_unfocus"
                 android:layout_centerVertical="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp"/>
 
             <EditText
-                android:id="@+id/loginActivityBody__input_pw_edit"
+                android:id="@+id/loginActivity__body__input_pw_edit"
                 android:hint="Password"
                 android:textSize="24sp"
                 android:textColor="@color/black"
                 android:background="@null"
                 android:inputType="textPassword"
+                android:imeOptions="actionDone"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/loginActivityBody__input_pw_icon"
+                android:layout_toEndOf="@+id/loginActivity__body__input_pw_icon"
                 android:paddingStart="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/loginActivityBody__input_submit_container"
-            android:layout_below="@+id/loginActivityBody__input_pw_container"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="50dp"
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/loginActivity__footer__container"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/loginActivity__footer__btn1_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/loginActivityBody__input_submit_btn"
+                android:id="@+id/loginActivity__footer__btn1_signIn"
                 android:text="@string/sign_in"
                 android:textSize="25sp"
                 android:textStyle="bold"
@@ -126,42 +135,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/loginActivityBody__input_option_container"
-            android:layout_below="@+id/loginActivityBody__input_submit_container"
-            android:layout_marginHorizontal="30dp"
+            android:id="@+id/loginActivity__footer__btn2_container"
+            android:layout_below="@+id/loginActivity__footer__btn1_container"
             android:layout_marginTop="20dp"
-            android:weightSum="10"
             android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/loginActivityBody__input_option_btn_find"
-                android:text="Forgot Account?"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:background="@drawable/gradation_id_find"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
-
-            <Button
-                android:id="@+id/loginActivityBody__input_option_btn_signUp"
+                android:id="@+id/loginActivity__footer__btn1_signUp"
                 android:text="Sign Up"
-                android:textSize="14sp"
+                android:textSize="25sp"
+                android:textStyle="bold"
                 android:textColor="@color/black"
                 android:background="@drawable/gradation_sign_up"
-                android:layout_marginStart="10dp"
-                android:layout_weight="5"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
     </RelativeLayout>
-
 
 </RelativeLayout>

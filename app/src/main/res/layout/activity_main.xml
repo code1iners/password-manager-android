@@ -9,13 +9,15 @@
 
     <RelativeLayout
         android:id="@+id/mainActivity__container"
-        android:paddingTop="60dp"
         android:paddingHorizontal="20dp"
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/mainActivity__header__container"
+            android:paddingVertical="10dp"
+            android:background="@drawable/border_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -52,13 +54,12 @@
         <RelativeLayout
             android:id="@+id/mainActivity__body__container"
             android:layout_below="@+id/mainActivity__header__container"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/mainActivity__body__scroll"
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -66,6 +67,7 @@
                     android:id="@+id/mainActivity__body__list"
                     tools:listitem="@layout/account_list_item"
                     tools:itemCount="3"
+                    android:paddingBottom="70dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -75,19 +77,19 @@
 
         <RelativeLayout
             android:id="@+id/mainActivity__footer__container"
-            android:layout_below="@+id/mainActivity__body__container"
-            android:layout_marginTop="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/mainActivity__footer__add_btn"
-                android:text="@string/add"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:background="@drawable/gradation_add"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:background="@drawable/gradation_add"
+                android:text="@string/add"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
         </RelativeLayout>
 
