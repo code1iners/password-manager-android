@@ -15,7 +15,8 @@ import timber.log.Timber
 
 class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>() {
     private lateinit var context: Context
-    private lateinit var accountList: ArrayList<AccountModel>
+    private lateinit var accounts: ArrayList<AccountModel>
+    private lateinit var clicker: AccountClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountAdapter.CustomViewHolder {
         Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
@@ -25,14 +26,14 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>() {
 
     override fun onBindViewHolder(h: AccountAdapter.CustomViewHolder, p: Int) {
         Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
-        val m = accountList[p]
+        val m = accounts[p]
 
         applyView(h, m)
     }
 
-    override fun getItemCount(): Int { return accountList.size }
+    override fun getItemCount(): Int { return accounts.size }
     // note. expansion
-    fun setList(list: ArrayList<AccountModel>) { this.accountList = list }
+    fun setList(list: ArrayList<AccountModel>) { this.accounts = list }
     fun setContext(context: Context) { this.context = context }
 
     private fun applyView(h: AccountAdapter.CustomViewHolder, m: AccountModel) {
@@ -85,13 +86,21 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>() {
         }
 
         override fun onClick(v: View) {
-            when (v.id) {
-                R.id.accountListItem__body__option__modify -> {
-                    Timber.w( "accountListItem__option__modify_OnClick")
-
+            try {
+                val p = adapterPosition
+                val m = accounts[p]
+                when (v.id) {
+                    R.id.accountListItem__body__option__modify -> { clicker.accountModify(p, m) }
                 }
-            }
+            } catch (e: Exception) {e.printStackTrace()}
         }
+    }
 
+    fun setAccountClickListener(listener: AccountClickListener) {
+        this.clicker = listener
+    }
+
+    interface AccountClickListener {
+        fun accountModify(p: Int, m: AccountModel)
     }
 }

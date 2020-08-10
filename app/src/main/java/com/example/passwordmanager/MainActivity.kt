@@ -26,7 +26,7 @@ import timber.log.Timber
 import kotlin.system.exitProcess
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.AccountClickListener {
     private var backKeyPressedTime: Long = 0
     private lateinit var toast: Toast
     private lateinit var context: Context
@@ -69,12 +69,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun refreshAccountList() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
         try {
-            val storedList: ArrayList<AccountModel> = AccountInfoManager.get(activity)!!
+            val storedList: ArrayList<AccountModel>? = AccountInfoManager.get(activity)
             accountList.clear()
-            for ((idx, model) in storedList.withIndex()) {
-                accountList.add(model)
-                accountAdapter.notifyItemChanged(idx)
+            if (!storedList.isNullOrEmpty()) {
+                for ((idx, model) in storedList.withIndex()) {
+                    accountList.add(model)
+                }
             }
+            accountAdapter.notifyDataSetChanged()
         } catch (e: Exception) {e.printStackTrace()}
     }
 
@@ -151,6 +153,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         accountAdapter = AccountAdapter()
         Timber.i("accountAdapter : $accountAdapter")
         accountAdapter.setList(accountList)
+        accountAdapter.setAccountClickListener(this)
 
         // note. init layout manager
         val linearLayoutManager = LinearLayoutManager(activity)
@@ -231,7 +234,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             Protocol.SUCCESS -> {
                                 try {
                                     refreshAccountList()
-                                } catch (e:Exception) {e.printStackTrace()}
+                                } catch (e: Exception) {e.printStackTrace()}
+                            }
+
+                            else -> {
+                                refreshAccountList()
                             }
                         }
                     }
@@ -246,7 +253,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
         try {
             Timber.i( "keyCode : $keyCode, event : $event, repeatCount : ${event?.repeatCount}")
-            if (keyCode == KeyEvent.KEYCODE_BACK && event?.getRepeatCount() == 0) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event?.repeatCount == 0) {
 
                 // note. 2000 milliseconds = 2sec
                 if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
@@ -281,9 +288,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.mainActivity__footer__add_btn -> {
                 Timber.w("mainActivity__footer__add_btn_OnClick")
                 val accountAddActivity = Intent(context, AccountAddActivity::class.java)
+                accountAddActivity.putExtra(Protocol.ACCESS_KIND, Protocol.CREATE)
                 startActivityForResult(accountAddActivity, Protocol.REQUEST_CODE_ADD_ACCOUNT)
             }
         }
+    }
+
+    override fun accountModify(p: Int, m: AccountModel) {
+        try {
+            Timber.i("p:$p, m:${m.title}")
+            val accountAddActivity = Intent(context, AccountAddActivity::class.java)
+            accountAddActivity.putExtra(Protocol.ACCESS_KIND, Protocol.MODIFY)
+            accountAddActivity.putExtra(Protocol.POSITION, p)
+            accountAddActivity.putExtra(Protocol.ACCOUNT_MODEL, Gson().toJson(m))
+            startActivityForResult(accountAddActivity, Protocol.REQUEST_CODE_ADD_ACCOUNT)
+        } catch (e: Exception) {e.printStackTrace()}
     }
 
     companion object {

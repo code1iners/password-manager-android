@@ -11,6 +11,10 @@ object Protocol {
     // note.
     const val NULL = "null"
     const val EMPTY = ""
+    const val BACK = "BACK"
+    const val CREATE = "CREATE"
+    const val MODIFY = "MODIFY"
+    const val UNIQUE_KEY_LENGTH = 40
     const val ACCOUNT = "ACCOUNT"
     const val ACCOUNT_DATA = "ACCOUNT_DATA"
     const val ACCOUNT_LIST = "ACCOUNT_LIST"
@@ -19,11 +23,13 @@ object Protocol {
     const val MY_ACTIVITY = "MY_ACTIVITY"
     const val COMMAND = "COMMAND"
     const val ARGUMENTS = "ARGUMENTS"
+    const val ACCOUNT_MODEL = "ACCOUNT_MODEL"
+    const val POSITION = "POSITION"
     const val SIGN_OUT = "SIGN_OUT"
     const val APP_TERMINATE = "APP_TERMINATE"
     const val NICKNAME = "NICKNAME"
-    const val SUCCESS = "SUCCESS"
     const val SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS"
+    const val SUCCESS = "SUCCESS"
     const val WARNING = "WARNING"
     const val ERROR = "ERROR"
 }

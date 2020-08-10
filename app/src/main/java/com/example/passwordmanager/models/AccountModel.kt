@@ -5,24 +5,21 @@ import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 
 class AccountModel {
+    lateinit var pk: String
     lateinit var title: String
     lateinit var hint: String
     lateinit var id: String
     lateinit var pw: String
-    lateinit var created: LocalDateTime
-    lateinit var updated: LocalDateTime
-
-    fun setAll(title: String?, hint: String?, id: String?, pw: String?) {
-        this.title = title.toString()
-        this.hint = hint.toString()
-        this.id = id.toString()
-        this.pw = pw.toString()
-    }
+    lateinit var created: String
+    lateinit var updated: String
 
     fun logger() {
+        Timber.i( "pk : $pk")
         Timber.i( "title : $title")
         Timber.i( "hint : $hint")
         Timber.i( "id : $id")
         Timber.i( "pw : $pw")
+        Timber.i( "created : $created")
+        Timber.i( "updated : $updated")
     }
 }
