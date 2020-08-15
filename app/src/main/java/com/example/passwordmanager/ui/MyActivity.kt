@@ -39,6 +39,7 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
     var thumbnailFilePath: String? = null
     var isGrantedWriteExternalStorage = false
     var isGrantedReadExternalStorage = false
+    var isUpdated = false
     // note. widgets
     // note. widgets-header
     lateinit var myActivity__container: RelativeLayout
@@ -61,7 +62,6 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
 
     private fun applyView() {
         Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
-
         Timber.i( "savedName:${MainActivity.clientNickname}, savedThubmanil:${MainActivity.clientThumbnail}")
         if (!MainActivity.clientNickname.isNullOrEmpty()) {
             // note. apply username
@@ -126,11 +126,13 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
         when (v.id) {
             R.id.myActivity__header__status_back -> {
                 try {
-                    val myActivityResult = Intent()
-                    myActivityResult.putExtra(COMMAND, SUCCESS)
-                    myActivityResult.putExtra(USER_NICKNAME, myActivity__body__nickname_edit.text.toString())
-                    myActivityResult.putExtra(USER_THUMBNAIL, thumbnailFilePath)
-                    setResult(RESULT_OK, myActivityResult)
+                    if (isUpdated) {
+                        val myActivityResult = Intent()
+                        myActivityResult.putExtra(COMMAND, SUCCESS)
+                        myActivityResult.putExtra(USER_NICKNAME, myActivity__body__nickname_edit.text.toString())
+                        myActivityResult.putExtra(USER_THUMBNAIL, thumbnailFilePath)
+                        setResult(RESULT_OK, myActivityResult)
+                    }
                     finish()
                 } catch (e: Exception) {e.printStackTrace()}
             }
@@ -182,6 +184,8 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
                         R.string.nickname_saved, Snackbar.LENGTH_LONG)
                     snack.show()
                     snack.setAction(R.string.confirm) { snack.dismiss() }
+                    // note. change updated status
+                    isUpdated = true
                 } catch (e: Exception) {e.printStackTrace()}
             }
         }

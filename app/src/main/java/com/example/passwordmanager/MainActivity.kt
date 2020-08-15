@@ -238,11 +238,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
                                         if (!nickname.isNullOrEmpty()) {
                                             // note. set nickname
                                             mainActivity__header__item_nickname.text = nickname
+                                            clientNickname = nickname
                                         }
 
                                         if (!thumbnail.isNullOrEmpty()) {
                                             // note. set thumbnail
                                             Glide.with(context).load(thumbnail).apply(GlideOptions.centerCropAndCircleCrop()).into(mainActivity__header__item_mySetting)
+                                            clientThumbnail = thumbnail
                                         }
                                     }
                                 }
