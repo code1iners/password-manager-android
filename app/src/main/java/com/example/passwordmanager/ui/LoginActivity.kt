@@ -101,12 +101,12 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdit
     override fun onClick(v: View) {
         when (v.id) {
             R.id.loginActivity__header_title -> {
-                PreferencesManager(activity, Protocol.ACCOUNT).check()
+                PreferencesManager(activity, Protocol.USER_PROFILE).check()
             }
 
             R.id.loginActivity__footer__btn1_signIn -> {
                 Timber.w( "loginActivity__footer__btn1_signIn_OnClick")
-                val pw = PreferencesManager(activity, Protocol.ACCOUNT)[Protocol.CLIENT_PW]
+                val pw = PreferencesManager(activity, Protocol.USER_PROFILE)[Protocol.CLIENT_PW]
                 if (!pw.isNullOrEmpty()) {
                     Timber.i("Password is exist! (pw:$pw)")
                     val inputPassword = loginActivity__body__input_pw_edit.text.toString()

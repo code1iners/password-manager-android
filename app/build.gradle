@@ -43,7 +43,7 @@ dependencies {
 //    // note. For control over item selection of both touch and mouse driven selection
 //    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
     // note. helpers
-    implementation 'com.github.takeMyHands:helpers-android:0.1.16'
+    implementation 'com.github.takeMyHands:helpers-android:0.1.31'
     // note. snack bar
     implementation 'com.android.support:design:29.0.0'
     // note. timber
@@ -52,4 +52,7 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
     // note. gson
     implementation 'com.google.code.gson:gson:2.8.6'
+    // note. glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }

@@ -110,7 +110,7 @@ class JoinActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
 
         val mainActivity = MainActivity.activity
 
-        val manager = PreferencesManager(mainActivity, Protocol.ACCOUNT)
+        val manager = PreferencesManager(mainActivity, Protocol.USER_PROFILE)
         manager.add(Protocol.CLIENT_PW, joinActivityBody__input_pw_edit.text.toString())
 
         val intent = Intent()

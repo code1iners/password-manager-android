@@ -53,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/myActivity__header__avatar_thumbnail"
                     android:src="@drawable/user_004"
                     android:scaleType="fitXY"

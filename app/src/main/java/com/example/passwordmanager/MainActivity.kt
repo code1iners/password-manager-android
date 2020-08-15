@@ -13,15 +13,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.helpers.GlideOptions
 import com.example.helpers.PreferencesManager
+import com.example.passwordmanager.Protocol.ACCOUNT_DATA
+import com.example.passwordmanager.Protocol.ACCOUNT_LIST
+import com.example.passwordmanager.Protocol.CLIENT_PW
+import com.example.passwordmanager.Protocol.USER_NICKNAME
+import com.example.passwordmanager.Protocol.USER_PROFILE
+import com.example.passwordmanager.Protocol.USER_THUMBNAIL
 import com.example.passwordmanager.adapters.AccountAdapter
 import com.example.passwordmanager.helpers.AccountInfoManager
 import com.example.passwordmanager.models.AccountModel
 import com.example.passwordmanager.ui.AccountAddActivity
 import com.example.passwordmanager.ui.LoginActivity
 import com.example.passwordmanager.ui.MyActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.jakewharton.threetenabp.AndroidThreeTen
+import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import kotlin.system.exitProcess
 
@@ -62,8 +72,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
 
     private fun applyView() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
-
+        // note. user nickname
         mainActivity__header__item_nickname.text = clientNickname
+        // note. use thumbnail
+        Glide.with(context).load(clientThumbnail).apply(GlideOptions.centerCropAndCircleCrop()).into(mainActivity__header__item_mySetting)
     }
 
     private fun refreshAccountList() {
@@ -83,11 +95,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
     private fun checkArgs() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
-        val manager = PreferencesManager(activity, Protocol.ACCOUNT)
-        clientPw = manager[Protocol.CLIENT_PW]
-        clientNickname = manager[Protocol.NICKNAME]
+        val manager = PreferencesManager(activity, Protocol.USER_PROFILE)
+        clientPw = manager[CLIENT_PW]
+        clientNickname = manager[USER_NICKNAME]
+        clientThumbnail = manager[USER_THUMBNAIL]
 
-        Timber.i("clientPw : $clientPw, clientNickname : $clientNickname")
+        Timber.i("clientPw:$clientPw, clientNickname:$clientNickname, clientThumbnail:$clientThumbnail")
+        if (clientThumbnail.isNullOrEmpty()) Snackbar.make(mainActivity__container, "프로필 이미지 파일을 찾을 수 없습니다.", Snackbar.LENGTH_LONG).show()
         if (clientPw == null) isUser = false
         Timber.i("isUser : $isUser")
     }
@@ -202,9 +216,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
                             Protocol.SIGN_OUT -> {
                                 val mainActivity = activity
 
-                                val manager = PreferencesManager(mainActivity, Protocol.ACCOUNT)
-                                manager.remove(Protocol.NICKNAME)
-                                manager.remove(Protocol.CLIENT_PW)
+                                val userData = PreferencesManager(mainActivity, USER_PROFILE)
+                                userData.remove(USER_NICKNAME)
+                                userData.remove(CLIENT_PW)
+
+                                val accountData = PreferencesManager(mainActivity, ACCOUNT_DATA)
+                                accountData.remove(ACCOUNT_LIST)
 
                                 // note. update(init) text
                                 mainActivity__header__item_nickname.text = Protocol.EMPTY
@@ -216,10 +233,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
                                 val command = data.getStringExtra(Protocol.COMMAND)
                                 when (command) {
                                     Protocol.SUCCESS -> {
-                                        val args = data.getStringExtra(Protocol.ARGUMENTS)
-                                        if (!args.isNullOrEmpty()) {
+                                        val nickname = data.getStringExtra(USER_NICKNAME)
+                                        val thumbnail = data.getStringExtra(USER_THUMBNAIL)
+                                        if (!nickname.isNullOrEmpty()) {
                                             // note. set nickname
-                                            mainActivity__header__item_nickname.text = args
+                                            mainActivity__header__item_nickname.text = nickname
+                                        }
+
+                                        if (!thumbnail.isNullOrEmpty()) {
+                                            // note. set thumbnail
+                                            Glide.with(context).load(thumbnail).apply(GlideOptions.centerCropAndCircleCrop()).into(mainActivity__header__item_mySetting)
                                         }
                                     }
                                 }
@@ -309,6 +332,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         lateinit var activity: Activity
         var clientPw: String? = null
         var clientNickname: String? = null
+        var clientThumbnail: String? = null
         var isUser: Boolean = true
     }
 }
