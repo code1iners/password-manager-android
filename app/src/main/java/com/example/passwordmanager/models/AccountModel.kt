@@ -10,6 +10,7 @@ class AccountModel {
     lateinit var hint: String
     lateinit var id: String
     lateinit var pw: String
+    lateinit var icon: String
     lateinit var created: String
     lateinit var updated: String
 
@@ -19,6 +20,7 @@ class AccountModel {
         Timber.i( "hint : $hint")
         Timber.i( "id : $id")
         Timber.i( "pw : $pw")
+        Timber.i( "icon : $icon")
         Timber.i( "created : $created")
         Timber.i( "updated : $updated")
     }

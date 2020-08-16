@@ -31,7 +31,7 @@
 
             <TextView
                 android:id="@+id/mainActivity__header__item_myAccount"
-                android:text="@string/my_account"
+                android:text="@string/my_accounts"
                 android:textSize="16sp"
                 android:layout_toEndOf="@+id/mainActivity__header__item_nickname"
                 android:layout_centerVertical="true"

@@ -44,15 +44,16 @@
 
         </RelativeLayout>
 
-        <ScrollView
+        <RelativeLayout
+            android:id="@+id/accountAddActivity__body__account_container"
             android:layout_below="@+id/accountAddActivity__header__status"
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:id="@+id/accountAddActivity__body__account_container"
-                android:paddingBottom="100dp"
-                android:layout_marginTop="30dp"
+            <LinearLayout
+                android:id="@+id/accountAddActivity__body__account_text_container"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -66,8 +67,8 @@
 
                     <ImageView
                         android:id="@+id/accountAddActivity__body__account_title_icon"
-                        android:src="@color/black"
-                        android:scaleType="fitXY"
+                        android:src="@drawable/title_001"
+                        android:scaleType="centerCrop"
                         android:background="@null"
                         android:layout_centerVertical="true"
                         android:layout_alignParentStart="true"
@@ -115,8 +116,8 @@
 
                     <ImageView
                         android:id="@+id/accountAddActivity__body__account_id_icon"
-                        android:src="@color/black"
-                        android:scaleType="fitXY"
+                        android:src="@drawable/id_003"
+                        android:scaleType="centerCrop"
                         android:background="@null"
                         android:layout_centerVertical="true"
                         android:layout_alignParentStart="true"
@@ -141,6 +142,7 @@
                         android:textColor="@color/sexyBlack"
                         android:imeOptions="actionDone"
                         android:singleLine="true"
+                        android:inputType="textEmailAddress"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/accountAddActivity__body__account_id_label"
@@ -164,8 +166,8 @@
 
                     <ImageView
                         android:id="@+id/accountAddActivity__body__account_pw_icon"
-                        android:src="@color/black"
-                        android:scaleType="fitXY"
+                        android:src="@drawable/secret_001"
+                        android:scaleType="centerCrop"
                         android:background="@null"
                         android:layout_centerVertical="true"
                         android:layout_alignParentStart="true"
@@ -213,8 +215,8 @@
 
                     <ImageView
                         android:id="@+id/accountAddActivity__body__account_hint_icon"
-                        android:src="@color/black"
-                        android:scaleType="fitXY"
+                        android:src="@drawable/help_001"
+                        android:scaleType="centerCrop"
                         android:background="@null"
                         android:layout_centerVertical="true"
                         android:layout_alignParentStart="true"
@@ -250,8 +252,56 @@
 
                 </RelativeLayout>
 
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/accountAddActivity__body__account_icon_container"
+                android:layout_below="@+id/accountAddActivity__body__account_text_container"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/border_5"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/accountAddActivity__body__account_icon_search"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="@string/filePath"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/sexyBlack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/accountAddActivity__body__account_icon_path_value"
+                        android:text="@string/value"
+                        android:textSize="12sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/accountAddActivity__body__account_icon_search"
+                    android:src="@drawable/image_005"
+                    android:scaleType="centerCrop"
+                    android:background="@null"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"/>
+
             </RelativeLayout>
-        </ScrollView>
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/accountAddActivity__footer__submit_container"

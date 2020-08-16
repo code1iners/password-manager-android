@@ -3,9 +3,13 @@ package com.example.passwordmanager
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
 import android.view.KeyEvent
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -40,6 +44,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
     private var backKeyPressedTime: Long = 0
     private lateinit var toast: Toast
     private lateinit var context: Context
+    private lateinit var backgrounds: Array<Drawable>
+    var animDeleteLeft: Animation? = null
 
     // note. widgets
     // note. user info
@@ -51,7 +57,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
     private lateinit var mainActivity__header__item_mySetting: ImageButton
 
     // note. item list
-    private lateinit var accountList: ArrayList<AccountModel>
+    private lateinit var accounts: ArrayList<AccountModel>
     private lateinit var accountAdapter: AccountAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,11 +87,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
     private fun refreshAccountList() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
         try {
-            val storedList: ArrayList<AccountModel>? = AccountInfoManager.get(activity)
-            accountList.clear()
+            val storedList: ArrayList<AccountModel>? = AccountInfoManager.read(activity)
+            accounts.clear()
             if (!storedList.isNullOrEmpty()) {
                 for ((idx, model) in storedList.withIndex()) {
-                    accountList.add(model)
+                    accounts.add(model)
                 }
             }
             accountAdapter.notifyDataSetChanged()
@@ -103,7 +109,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         Timber.i("clientPw:$clientPw, clientNickname:$clientNickname, clientThumbnail:$clientThumbnail")
         if (clientThumbnail.isNullOrEmpty()) Snackbar.make(mainActivity__container, "프로필 이미지 파일을 찾을 수 없습니다.", Snackbar.LENGTH_LONG).show()
         if (clientPw == null) isUser = false
-        Timber.i("isUser : $isUser")
+        Timber.i("isUser:$isUser")
     }
 
     private fun displayLoginView() {
@@ -124,6 +130,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         initWidgets()
         // note. init adapters
         initAdapters()
+        // note. init animations
+        initAnimations()
+    }
+
+    private fun initAnimations() {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            animDeleteLeft = AnimationUtils.loadAnimation(context, R.anim.move_left_001)
+        } catch (e: Exception) {e.printStackTrace()}
     }
 
     private fun initLibraries() {
@@ -162,11 +177,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
     private fun initAdapters() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
-        accountList = ArrayList()
-        Timber.i("accountList : $accountList")
+        accounts = ArrayList()
+        Timber.i("accounts:$accounts")
         accountAdapter = AccountAdapter()
-        Timber.i("accountAdapter : $accountAdapter")
-        accountAdapter.setList(accountList)
+        accountAdapter.setContext(context)
+        accountAdapter.setBackgrounds(backgrounds)
+        Timber.i("accountAdapter:$accountAdapter")
+        accountAdapter.setList(accounts)
         accountAdapter.setAccountClickListener(this)
 
         // note. init layout manager
@@ -186,18 +203,31 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         context = applicationContext
         // note. toast
         toast = Toast(context)
+        // note. account item backgrounds
+        backgrounds = arrayOf(
+            context.resources.getDrawable(R.drawable.gradation_item01),
+            context.resources.getDrawable(R.drawable.gradation_item02),
+            context.resources.getDrawable(R.drawable.gradation_item03),
+            context.resources.getDrawable(R.drawable.gradation_item04),
+            context.resources.getDrawable(R.drawable.gradation_item05),
+            context.resources.getDrawable(R.drawable.gradation_item06),
+            context.resources.getDrawable(R.drawable.gradation_item07),
+            context.resources.getDrawable(R.drawable.gradation_item08),
+            context.resources.getDrawable(R.drawable.gradation_item09),
+            context.resources.getDrawable(R.drawable.gradation_item10)
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
-        Timber.i("requestCode : $requestCode, resultCode : $resultCode, data : $data")
+        Timber.i("requestCode:$requestCode, resultCode:$resultCode, data:$data")
         try {
             if (resultCode == RESULT_OK) {
                 when (requestCode) {
                     Protocol.REQUEST_CODE_LOGIN_ACTIVITY -> {
                         val command = data?.getStringExtra(Protocol.COMMAND)
-                        Timber.i("command : $command")
+                        Timber.i("command:$command")
 
                         // note. terminate application
                         when (command) {
@@ -277,7 +307,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
         try {
-            Timber.i( "keyCode : $keyCode, event : $event, repeatCount : ${event?.repeatCount}")
+            Timber.i( "keyCode:$keyCode, event:$event, repeatCount:${event?.repeatCount}")
             if (keyCode == KeyEvent.KEYCODE_BACK && event?.repeatCount == 0) {
 
                 // note. 2000 milliseconds = 2sec
@@ -319,7 +349,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         }
     }
 
-    override fun accountModify(p: Int, m: AccountModel) {
+    override fun accountUpdate(p: Int, m: AccountModel) {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
         try {
             Timber.i("p:$p, m:${m.title}")
             val accountAddActivity = Intent(context, AccountAddActivity::class.java)
@@ -327,6 +358,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
             accountAddActivity.putExtra(Protocol.POSITION, p)
             accountAddActivity.putExtra(Protocol.ACCOUNT_MODEL, Gson().toJson(m))
             startActivityForResult(accountAddActivity, Protocol.REQUEST_CODE_ADD_ACCOUNT)
+        } catch (e: Exception) {e.printStackTrace()}
+    }
+
+    override fun accountDelete(h: AccountAdapter.CustomViewHolder, p: Int, m: AccountModel) {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            Timber.i("p:$p, m:${m.title}")
+            runOnUiThread {
+                h.accountListItem__container.startAnimation(animDeleteLeft)
+                Handler().postDelayed({
+                    // note. delete in view
+                    accounts.remove(m)
+                    // note. delete in device
+                    AccountInfoManager.delete(activity, p, m)
+                    accountAdapter.notifyDataSetChanged()
+                }, animDeleteLeft!!.duration)
+            }
+
         } catch (e: Exception) {e.printStackTrace()}
     }
 

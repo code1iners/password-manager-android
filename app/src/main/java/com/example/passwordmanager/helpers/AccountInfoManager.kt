@@ -24,7 +24,7 @@ class AccountInfoManager {
                 // note. origin code
                 val arr: JSONArray = JSONArray()
 
-                val storedData = get(activity)
+                val storedData = read(activity)
                 if (storedData.isNullOrEmpty()) {
                     Timber.w("accountData is null")
                     val obj: JSONObject = JSONObject()
@@ -33,6 +33,7 @@ class AccountInfoManager {
                     obj.put("hint", receiveModel.hint)
                     obj.put("id", receiveModel.id)
                     obj.put("pw", receiveModel.pw)
+                    obj.put("icon", receiveModel.icon)
                     obj.put("created", receiveModel.created)
                     obj.put("updated", receiveModel.updated)
                     Timber.i("obj:${obj}")
@@ -41,7 +42,7 @@ class AccountInfoManager {
                 } else {
                     Timber.w("accountData is non-null")
 
-                    val storedList = get(activity)!!
+                    val storedList = read(activity)!!
                     for ((idx, storedModel) in storedList.withIndex()) {
                         val obj = JSONObject()
                         obj.put("pk", storedModel.pk)
@@ -49,6 +50,7 @@ class AccountInfoManager {
                         obj.put("hint", storedModel.hint)
                         obj.put("id", storedModel.id)
                         obj.put("pw", storedModel.pw)
+                        obj.put("icon", storedModel.icon)
                         obj.put("created", storedModel.created)
                         obj.put("updated", storedModel.updated)
                         arr.put(obj)
@@ -59,6 +61,7 @@ class AccountInfoManager {
                     obj.put("hint", receiveModel.hint)
                     obj.put("id", receiveModel.id)
                     obj.put("pw", receiveModel.pw)
+                    obj.put("icon", receiveModel.icon)
                     obj.put("created", receiveModel.created)
                     obj.put("updated", receiveModel.updated)
                     arr.put(obj)
@@ -69,43 +72,7 @@ class AccountInfoManager {
             } catch (e: Exception) {e.printStackTrace()}
         }
 
-        fun update(activity: Activity, p: Int, receiveModel: AccountModel) {
-            Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
-            try {
-                Timber.i("${receiveModel.logger()}")
-                if (!get(activity).isNullOrEmpty()) {
-                    val arr = JSONArray()
-                    for ((idx, storedModel) in get(activity)!!.withIndex()) {
-                        val obj = JSONObject()
-                        if (receiveModel.pk == storedModel.pk) {
-                            obj.put("pk", receiveModel.pk)
-                            obj.put("title", receiveModel.title)
-                            obj.put("hint", receiveModel.hint)
-                            obj.put("id", receiveModel.id)
-                            obj.put("pw", receiveModel.pw)
-                            obj.put("created", receiveModel.created)
-                            obj.put("updated", receiveModel.updated)
-                            arr.put(obj)
-                            continue
-                        }
-                        obj.put("pk", storedModel.pk)
-                        obj.put("title", storedModel.title)
-                        obj.put("hint", storedModel.hint)
-                        obj.put("id", storedModel.id)
-                        obj.put("pw", storedModel.pw)
-                        obj.put("created", storedModel.created)
-                        obj.put("updated", storedModel.updated)
-                        arr.put(obj)
-                    }
-
-                    // note. save into device
-                    PreferencesManager(activity, Protocol.ACCOUNT_DATA).add(Protocol.ACCOUNT_LIST, arr.toString())
-                }
-
-            } catch (e: Exception) {e.printStackTrace()}
-        }
-
-        fun get(activity: Activity): ArrayList<AccountModel>? {
+        fun read(activity: Activity): ArrayList<AccountModel>? {
             Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
             try {
 //                // note. origin code
@@ -140,6 +107,7 @@ class AccountInfoManager {
                         model.hint = storedList.getJSONObject(idx).getString("hint")
                         model.id = storedList.getJSONObject(idx).getString("id")
                         model.pw = storedList.getJSONObject(idx).getString("pw")
+                        model.icon = storedList.getJSONObject(idx).getString("icon")
 //                        model.created = LocalDateTime.parse(storedList.getJSONObject(idx).getString("created"))
 //                        model.updated = LocalDateTime.parse(storedList.getJSONObject(idx).getString("updated"))
                         model.created = storedList.getJSONObject(idx).getString("created")
@@ -151,6 +119,70 @@ class AccountInfoManager {
                 }
             } catch (e: Exception) {e.printStackTrace()}
             return null
+        }
+
+        fun update(activity: Activity, p: Int, receiveModel: AccountModel) {
+            Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+            try {
+                Timber.i("${receiveModel.logger()}")
+                if (!read(activity).isNullOrEmpty()) {
+                    val arr = JSONArray()
+                    for ((idx, storedModel) in read(activity)!!.withIndex()) {
+                        val obj = JSONObject()
+                        if (receiveModel.pk == storedModel.pk) {
+                            obj.put("pk", receiveModel.pk)
+                            obj.put("title", receiveModel.title)
+                            obj.put("hint", receiveModel.hint)
+                            obj.put("id", receiveModel.id)
+                            obj.put("pw", receiveModel.pw)
+                            obj.put("icon", receiveModel.icon)
+                            obj.put("created", receiveModel.created)
+                            obj.put("updated", receiveModel.updated)
+                            arr.put(obj)
+                            continue
+                        }
+                        obj.put("pk", storedModel.pk)
+                        obj.put("title", storedModel.title)
+                        obj.put("hint", storedModel.hint)
+                        obj.put("id", storedModel.id)
+                        obj.put("pw", storedModel.pw)
+                        obj.put("icon", storedModel.icon)
+                        obj.put("created", storedModel.created)
+                        obj.put("updated", storedModel.updated)
+                        arr.put(obj)
+                    }
+
+                    // note. save into device
+                    PreferencesManager(activity, Protocol.ACCOUNT_DATA).add(Protocol.ACCOUNT_LIST, arr.toString())
+                }
+
+            } catch (e: Exception) {e.printStackTrace()}
+        }
+
+        fun delete(activity: Activity, p: Int, receiveModel: AccountModel) {
+            Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+            try {
+                Timber.i("${receiveModel.logger()}")
+                if (!read(activity).isNullOrEmpty()) {
+                    val arr = JSONArray()
+                    for ((idx, storedModel) in read(activity)!!.withIndex()) {
+                        val obj = JSONObject()
+                        if (receiveModel.pk == storedModel.pk) continue
+                        obj.put("pk", storedModel.pk)
+                        obj.put("title", storedModel.title)
+                        obj.put("hint", storedModel.hint)
+                        obj.put("id", storedModel.id)
+                        obj.put("pw", storedModel.pw)
+                        obj.put("icon", storedModel.icon)
+                        obj.put("created", storedModel.created)
+                        obj.put("updated", storedModel.updated)
+                        arr.put(obj)
+                    }
+
+                    // note. save into device
+                    PreferencesManager(activity, Protocol.ACCOUNT_DATA).add(Protocol.ACCOUNT_LIST, arr.toString())
+                }
+            } catch (e: Exception) {e.printStackTrace()}
         }
     }
 }
