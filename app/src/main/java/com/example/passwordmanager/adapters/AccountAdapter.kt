@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.helpers.GlideOptions
 import com.example.passwordmanager.R
+import com.example.passwordmanager.helpers.ItemTouchHelperListener
 import com.example.passwordmanager.models.AccountModel
 import timber.log.Timber
 import kotlin.random.Random
 
-class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>() {
+class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>(), ItemTouchHelperListener {
     private lateinit var context: Context
     private lateinit var accounts: ArrayList<AccountModel>
     private lateinit var clicker: AccountClickListener
@@ -146,5 +147,24 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>() {
     interface AccountClickListener {
         fun accountUpdate(p: Int, m: AccountModel)
         fun accountDelete(h: CustomViewHolder, p: Int, m: AccountModel)
+    }
+
+    override fun onItemMove(from_position: Int, to_position: Int): Boolean {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.i("from_position:$from_position, to_position:$to_position")
+
+        val account = accounts[from_position]
+        accounts.removeAt(from_position)
+        accounts.add(to_position, account)
+
+        notifyItemMoved(from_position, to_position)
+        return true
+    }
+
+    override fun onItemSwipe(position: Int) {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.i("position:$position")
+        accounts.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

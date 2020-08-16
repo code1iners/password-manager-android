@@ -181,7 +181,7 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
                     PreferencesManager(MainActivity.activity, USER_PROFILE).add(USER_THUMBNAIL, thumbnail)
                     // note. show snack bar
                     snack = Snackbar.make(findViewById(R.id.myActivity__container),
-                        R.string.nickname_saved, Snackbar.LENGTH_LONG)
+                        R.string.user_info_saved, Snackbar.LENGTH_LONG)
                     snack.show()
                     snack.setAction(R.string.confirm) { snack.dismiss() }
                     // note. change updated status

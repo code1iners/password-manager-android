@@ -60,14 +60,14 @@
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/mainActivity__body__scroll"
+                android:paddingBottom="70dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/mainActivity__body__list"
                     tools:listitem="@layout/account_list_item"
-                    tools:itemCount="3"
-                    android:paddingBottom="70dp"
+                    tools:itemCount="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 

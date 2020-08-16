@@ -11,7 +11,7 @@
     <string name="pw">비밀번호</string>
 
     <string name="join_alarm">비밀번호를 잃어버린 경우 다시 되찾을 수 없습니다.</string>
-    <string name="nickname_saved">닉네임이 정상적으로 저장되었습니다.</string>
+    <string name="user_info_saved">정상적으로 저장되었습니다.</string>
     <string name="confirm">확인</string>
     <string name="my_accounts">My Accounts</string>
     <string name="item">Item</string>

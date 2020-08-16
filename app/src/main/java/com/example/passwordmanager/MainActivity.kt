@@ -15,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -28,6 +29,7 @@ import com.example.passwordmanager.Protocol.USER_PROFILE
 import com.example.passwordmanager.Protocol.USER_THUMBNAIL
 import com.example.passwordmanager.adapters.AccountAdapter
 import com.example.passwordmanager.helpers.AccountInfoManager
+import com.example.passwordmanager.helpers.ItemTouchHelperCallback
 import com.example.passwordmanager.models.AccountModel
 import com.example.passwordmanager.ui.AccountAddActivity
 import com.example.passwordmanager.ui.LoginActivity
@@ -164,7 +166,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         mainActivity__header__item_nickname = findViewById(R.id.mainActivity__header__item_nickname)
         // note. body
         mainActivity__body__list = findViewById(R.id.mainActivity__body__list)
-        // note. footer
+//         note. footer
         mainActivity__footer__add_btn = findViewById(R.id.mainActivity__footer__add_btn)
 
         // note. set listeners
@@ -192,6 +194,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         // note set recyclerview
         mainActivity__body__list.layoutManager = linearLayoutManager
         mainActivity__body__list.adapter = accountAdapter
+        val helper = ItemTouchHelper(ItemTouchHelperCallback(accountAdapter))
+        helper.attachToRecyclerView(mainActivity__body__list)
     }
 
     private fun initEtc() {
