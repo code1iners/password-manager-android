@@ -21,6 +21,7 @@
     <string name="sign_out">Sign Out</string>
     <string name="my_profile">My Profile</string>
     <string name="add_account">Add Account</string>
+    <string name="modify_account">Modify Account</string>
     <string name="create">생성</string>
     <string name="hint">hint</string>
     <string name="search">Search</string>

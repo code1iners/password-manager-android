@@ -19,6 +19,7 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>(), 
     private lateinit var context: Context
     private lateinit var accounts: ArrayList<AccountModel>
     private lateinit var clicker: AccountClickListener
+    private lateinit var mover: AccountMoveListener
     private lateinit var backgrounds:Array<Drawable>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountAdapter.CustomViewHolder {
@@ -149,22 +150,21 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.CustomViewHolder>(), 
         fun accountDelete(h: CustomViewHolder, p: Int, m: AccountModel)
     }
 
+    fun setAccountMoveListener(listener: AccountMoveListener) {
+        this.mover = listener
+    }
+
+    interface AccountMoveListener {
+        fun itemMove(from_position: Int, to_position: Int)
+        fun itemSwipe(position: Int)
+    }
+
     override fun onItemMove(from_position: Int, to_position: Int): Boolean {
-        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
-        Timber.i("from_position:$from_position, to_position:$to_position")
-
-        val account = accounts[from_position]
-        accounts.removeAt(from_position)
-        accounts.add(to_position, account)
-
-        notifyItemMoved(from_position, to_position)
+        mover.itemMove(from_position, to_position)
         return true
     }
 
     override fun onItemSwipe(position: Int) {
-        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
-        Timber.i("position:$position")
-        accounts.removeAt(position)
-        notifyItemRemoved(position)
+        mover.itemSwipe(position)
     }
 }

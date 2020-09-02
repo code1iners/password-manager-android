@@ -19,13 +19,13 @@ class AccountInfoManager {
             Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
             try {
                 Timber.i("receiveModel:$receiveModel")
-                Timber.i("title:${receiveModel.title}")
+                receiveModel.logger()
 
                 // note. origin code
                 val arr: JSONArray = JSONArray()
 
-                val storedData = read(activity)
-                if (storedData.isNullOrEmpty()) {
+                val storedList = read(activity)
+                if (storedList.isNullOrEmpty()) {
                     Timber.w("accountData is null")
                     val obj: JSONObject = JSONObject()
                     obj.put("pk", receiveModel.pk)
@@ -42,7 +42,7 @@ class AccountInfoManager {
                 } else {
                     Timber.w("accountData is non-null")
 
-                    val storedList = read(activity)!!
+//                    val storedList = read(activity)!!
                     for ((idx, storedModel) in storedList.withIndex()) {
                         val obj = JSONObject()
                         obj.put("pk", storedModel.pk)
@@ -66,6 +66,106 @@ class AccountInfoManager {
                     obj.put("updated", receiveModel.updated)
                     arr.put(obj)
                 }
+                // note. save into device
+                PreferencesManager(activity, Protocol.ACCOUNT_DATA).add(Protocol.ACCOUNT_LIST, arr.toString())
+
+            } catch (e: Exception) {e.printStackTrace()}
+        }
+
+        fun create(activity: Activity, position: Int, receiveModel: AccountModel) {
+            Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+            try {
+                Timber.i("position:$position")
+                receiveModel.logger()
+
+                val arr: JSONArray = JSONArray()
+
+                val storedList = read(activity)!!
+                if (storedList.isNullOrEmpty()) {
+                    Timber.w("accountData is null")
+                    val obj: JSONObject = JSONObject()
+                    obj.put("pk", receiveModel.pk)
+                    obj.put("title", receiveModel.title)
+                    obj.put("hint", receiveModel.hint)
+                    obj.put("id", receiveModel.id)
+                    obj.put("pw", receiveModel.pw)
+                    obj.put("icon", receiveModel.icon)
+                    obj.put("created", receiveModel.created)
+                    obj.put("updated", receiveModel.updated)
+                    Timber.i("obj:${obj}")
+
+                    arr.put(obj)
+                } else {
+                    Timber.w("accountData is non-null")
+
+                    // note. origin code
+//                    for ((idx, storedModel) in storedList.withIndex()) {
+//                        val obj = JSONObject()
+//                        obj.put("pk", storedModel.pk)
+//                        obj.put("title", storedModel.title)
+//                        obj.put("hint", storedModel.hint)
+//                        obj.put("id", storedModel.id)
+//                        obj.put("pw", storedModel.pw)
+//                        obj.put("icon", storedModel.icon)
+//                        obj.put("created", storedModel.created)
+//                        obj.put("updated", storedModel.updated)
+//                        arr.put(obj)
+//                    }
+//                    val obj = JSONObject()
+//                    obj.put("pk", receiveModel.pk)
+//                    obj.put("title", receiveModel.title)
+//                    obj.put("hint", receiveModel.hint)
+//                    obj.put("id", receiveModel.id)
+//                    obj.put("pw", receiveModel.pw)
+//                    obj.put("icon", receiveModel.icon)
+//                    obj.put("created", receiveModel.created)
+//                    obj.put("updated", receiveModel.updated)
+//                    arr.put(obj)
+
+                    // note. new code
+
+                    storedList.add(position, receiveModel)
+                    for ((idx, storedModel) in storedList.withIndex()) {
+                        val obj = JSONObject()
+                        obj.put("pk", storedModel.pk)
+                        obj.put("title", storedModel.title)
+                        obj.put("hint", storedModel.hint)
+                        obj.put("id", storedModel.id)
+                        obj.put("pw", storedModel.pw)
+                        obj.put("icon", storedModel.icon)
+                        obj.put("created", storedModel.created)
+                        obj.put("updated", storedModel.updated)
+                        arr.put(obj)
+                    }
+
+//                    var listSize = storedList.size + 1
+//                    for (idx in 0 until listSize) {
+//                        val obj = JSONObject()
+//                        if (position == idx) {
+//                            obj.put("pk", receiveModel.pk)
+//                            obj.put("title", receiveModel.title)
+//                            obj.put("hint", receiveModel.hint)
+//                            obj.put("id", receiveModel.id)
+//                            obj.put("pw", receiveModel.pw)
+//                            obj.put("icon", receiveModel.icon)
+//                            obj.put("created", receiveModel.created)
+//                            obj.put("updated", receiveModel.updated)
+//                        } else {
+//                            val storedModel = storedList[idx]
+//                            obj.put("pk", storedModel.pk)
+//                            obj.put("title", storedModel.title)
+//                            obj.put("hint", storedModel.hint)
+//                            obj.put("id", storedModel.id)
+//                            obj.put("pw", storedModel.pw)
+//                            obj.put("icon", storedModel.icon)
+//                            obj.put("created", storedModel.created)
+//                            obj.put("updated", storedModel.updated)
+//                        }
+//
+//                        arr.put(obj)
+//                    }
+                }
+
                 // note. save into device
                 PreferencesManager(activity, Protocol.ACCOUNT_DATA).add(Protocol.ACCOUNT_LIST, arr.toString())
 

@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.helpers.PreferencesManager
+import com.example.helpers.ScreenManager
 import com.example.passwordmanager.MainActivity
 import com.example.passwordmanager.Protocol
 import com.example.passwordmanager.R
@@ -43,13 +44,21 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdit
     private fun init() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
-        // note. init context
+        // note. init variables
+        initVars()
+        // note. init widgets
+        initWidgets()
+        // note. display always on
+        ScreenManager.alwaysOn(activity)
+    }
+
+    private fun initVars() {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+
         activity = this
         context = applicationContext
         // note. init toast
         toast = Toast(context)
-        // note. init widgets
-        initWidgets()
     }
 
     private fun initWidgets() {

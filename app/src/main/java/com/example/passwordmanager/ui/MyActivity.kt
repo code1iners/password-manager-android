@@ -15,10 +15,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.bumptech.glide.Glide
-import com.example.helpers.FileManager
-import com.example.helpers.GlideOptions
-import com.example.helpers.PermissionManager
-import com.example.helpers.PreferencesManager
+import com.example.helpers.*
 import com.example.passwordmanager.MainActivity
 import com.example.passwordmanager.Protocol
 import com.example.passwordmanager.Protocol.COMMAND
@@ -77,10 +74,19 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
     private fun init() {
         Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
 
-        context = applicationContext
-        activity = this
+        // note. init varaiables
+        initVars()
         // note. init widgets
         initWidgets()
+        // note. display always on
+        ScreenManager.alwaysOn(activity)
+    }
+
+    private fun initVars() {
+        Timber.w( object:Any(){}.javaClass.enclosingMethod!!.name)
+
+        context = applicationContext
+        activity = this
     }
 
     private fun initWidgets() {

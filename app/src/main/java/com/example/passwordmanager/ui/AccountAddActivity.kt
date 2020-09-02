@@ -62,12 +62,14 @@ class AccountAddActivity : AppCompatActivity(), View.OnClickListener, View.OnLon
     private fun init() {
         Timber.w(object: Any(){}.javaClass.enclosingMethod!!.name)
 
-        // note. init etc
+        // note. init variables
         initVars()
         // note. check args
         checkArgs()
         // note. init widgets
         initWidgets()
+        // note. display always on
+        ScreenManager.alwaysOn(activity)
     }
 
     private fun checkArgs() {
@@ -151,6 +153,7 @@ class AccountAddActivity : AppCompatActivity(), View.OnClickListener, View.OnLon
                 Protocol.MODIFY -> {
                     try {
                         // note. body text
+                        accountAddActivity__header__status_title.text = resources.getString(R.string.modify_account)
                         accountAddActivity__body__account_title_edit.setText(accountModel.title)
                         accountAddActivity__body__account_id_edit.setText(accountModel.id)
                         accountAddActivity__body__account_pw_edit.setText(accountModel.pw)

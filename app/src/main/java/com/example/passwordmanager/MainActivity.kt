@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.helpers.GlideOptions
 import com.example.helpers.PreferencesManager
+import com.example.helpers.ScreenManager
 import com.example.passwordmanager.Protocol.ACCOUNT_DATA
 import com.example.passwordmanager.Protocol.ACCOUNT_LIST
 import com.example.passwordmanager.Protocol.CLIENT_PW
@@ -42,7 +43,7 @@ import timber.log.Timber
 import kotlin.system.exitProcess
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.AccountClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.AccountClickListener, AccountAdapter.AccountMoveListener {
     private var backKeyPressedTime: Long = 0
     private lateinit var toast: Toast
     private lateinit var context: Context
@@ -124,23 +125,42 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
     private fun init() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
+        // note. init variables
+        initVars()
         // note. init libraries
         initLibraries()
-        // note. init etc..
-        initEtc()
         // note. init widgets
         initWidgets()
         // note. init adapters
         initAdapters()
         // note. init animations
         initAnimations()
+        // note. display always on
+        ScreenManager.alwaysOn(activity)
     }
 
-    private fun initAnimations() {
+    private fun initVars() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
-        try {
-            animDeleteLeft = AnimationUtils.loadAnimation(context, R.anim.move_left_001)
-        } catch (e: Exception) {e.printStackTrace()}
+
+        // note. activity
+        activity = this
+        // note. context
+        context = applicationContext
+        // note. toast
+        toast = Toast(context)
+        // note. account item backgrounds
+        backgrounds = arrayOf(
+            context.resources.getDrawable(R.drawable.gradation_item01),
+            context.resources.getDrawable(R.drawable.gradation_item02),
+            context.resources.getDrawable(R.drawable.gradation_item03),
+            context.resources.getDrawable(R.drawable.gradation_item04),
+            context.resources.getDrawable(R.drawable.gradation_item05),
+            context.resources.getDrawable(R.drawable.gradation_item06),
+            context.resources.getDrawable(R.drawable.gradation_item07),
+            context.resources.getDrawable(R.drawable.gradation_item08),
+            context.resources.getDrawable(R.drawable.gradation_item09),
+            context.resources.getDrawable(R.drawable.gradation_item10)
+        )
     }
 
     private fun initLibraries() {
@@ -156,6 +176,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
 
     private fun initLibrariesThreeTen() {
         AndroidThreeTen.init(this)
+    }
+
+    private fun initAnimations() {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            animDeleteLeft = AnimationUtils.loadAnimation(context, R.anim.move_left_001)
+        } catch (e: Exception) {e.printStackTrace()}
     }
 
     private fun initWidgets() {
@@ -187,6 +214,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         Timber.i("accountAdapter:$accountAdapter")
         accountAdapter.setList(accounts)
         accountAdapter.setAccountClickListener(this)
+        accountAdapter.setAccountMoveListener(this)
 
         // note. init layout manager
         val linearLayoutManager = LinearLayoutManager(activity)
@@ -196,30 +224,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         mainActivity__body__list.adapter = accountAdapter
         val helper = ItemTouchHelper(ItemTouchHelperCallback(accountAdapter))
         helper.attachToRecyclerView(mainActivity__body__list)
-    }
-
-    private fun initEtc() {
-        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
-
-        // note. activity
-        activity = this
-        // note. context
-        context = applicationContext
-        // note. toast
-        toast = Toast(context)
-        // note. account item backgrounds
-        backgrounds = arrayOf(
-            context.resources.getDrawable(R.drawable.gradation_item01),
-            context.resources.getDrawable(R.drawable.gradation_item02),
-            context.resources.getDrawable(R.drawable.gradation_item03),
-            context.resources.getDrawable(R.drawable.gradation_item04),
-            context.resources.getDrawable(R.drawable.gradation_item05),
-            context.resources.getDrawable(R.drawable.gradation_item06),
-            context.resources.getDrawable(R.drawable.gradation_item07),
-            context.resources.getDrawable(R.drawable.gradation_item08),
-            context.resources.getDrawable(R.drawable.gradation_item09),
-            context.resources.getDrawable(R.drawable.gradation_item10)
-        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -379,6 +383,42 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
                     accountAdapter.notifyDataSetChanged()
                 }, animDeleteLeft!!.duration)
             }
+
+        } catch (e: Exception) {e.printStackTrace()}
+    }
+
+    override fun itemMove(from_position: Int, to_position: Int) {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            Timber.i("from:$from_position, to:$to_position")
+
+            val account = accounts[from_position]
+
+            // note. delete real data
+            AccountInfoManager.delete(activity, from_position, account)
+            AccountInfoManager.create(activity, to_position, account)
+
+            // note. client
+            accounts.removeAt(from_position)
+            accounts.add(to_position, account)
+
+            accountAdapter.notifyItemMoved(from_position, to_position)
+
+        } catch (e: Exception) {e.printStackTrace()}
+    }
+
+    override fun itemSwipe(position: Int) {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            Timber.i("position:$position")
+
+            // note. delete real data
+            AccountInfoManager.delete(activity, position, accounts[position])
+
+            // note. client
+            accounts.removeAt(position)
+            accountAdapter.notifyItemRemoved(position)
+
 
         } catch (e: Exception) {e.printStackTrace()}
     }
