@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PasswordManager</string>
+    <string name="app_name">잊지말개</string>
     <string name="username">Username</string>
     <string name="nickname">Nickname</string>
     <string name="password">Password</string>
