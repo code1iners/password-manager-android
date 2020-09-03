@@ -8,5 +8,18 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="sexyBlack">#29323c</color>
+    <color name="sexyBlack2">#22243C</color>
+    <color name="sexyBlack3">#2c2f33</color>
+
+    <color name="sexyGray">#636e72</color>
+    <color name="sexyGray2">#434459</color>
+
+    <color name="kakaoYellow">#FFE504</color>
+    <color name="selected_item">#FF9800</color>
+    <color name="sexyBlue">#01B3FD</color>
+    <color name="sexyGreen">#54D298</color>
+    <color name="sexyRed">#FD154F</color>
+    <color name="sexyYellow">#FED06D</color>
+    <color name="transparent">#80000000</color>
 
 </resources>

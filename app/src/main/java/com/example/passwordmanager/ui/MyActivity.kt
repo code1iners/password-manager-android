@@ -19,6 +19,7 @@ import com.example.helpers.*
 import com.example.passwordmanager.MainActivity
 import com.example.passwordmanager.Protocol
 import com.example.passwordmanager.Protocol.COMMAND
+import com.example.passwordmanager.Protocol.EMPTY
 import com.example.passwordmanager.Protocol.REQUEST_CODE_GALLERY_PHOTO
 import com.example.passwordmanager.Protocol.SUCCESS
 import com.example.passwordmanager.Protocol.USER_NICKNAME
@@ -179,12 +180,12 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
                 try {
                     // note. declared and assignment in var
                     val nickname = myActivity__body__nickname_edit.text.toString()
-                    val thumbnail = thumbnailFilePath!!
+                    var thumbnail = if (thumbnailFilePath.isNullOrBlank()) thumbnailFilePath else EMPTY
                     // note. apply nickname field
                     myActivity__header__username.text = nickname
                     // note. stored nickname user's device
                     PreferencesManager(MainActivity.activity, USER_PROFILE).add(USER_NICKNAME, nickname)
-                    PreferencesManager(MainActivity.activity, USER_PROFILE).add(USER_THUMBNAIL, thumbnail)
+                    if (!thumbnail.isNullOrBlank()) PreferencesManager(MainActivity.activity, USER_PROFILE).add(USER_THUMBNAIL, thumbnail)
                     // note. show snack bar
                     snack = Snackbar.make(findViewById(R.id.myActivity__container),
                         R.string.user_info_saved, Snackbar.LENGTH_LONG)

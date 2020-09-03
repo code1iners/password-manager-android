@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/signUpFragment_login_password_edit"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textColorHint="#80FFFFFF"
+        android:hint="PASSWORD"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:background="@drawable/border_10_black"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/signUpFragment_login_password_edit_again"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textColorHint="#80FFFFFF"
+        android:hint="PASSWORD AGAIN"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:background="@drawable/border_10_black"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/signUpFragment_login_password_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/signUpFragment_login_method_container"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentBottom="true"
+        android:weightSum="10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/signUpFragment_login_method_password_container"
+            android:background="@drawable/border_15_white"
+            android:orientation="vertical"
+            android:paddingVertical="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/signUpFragment_login_method_password_image"
+                android:src="@drawable/lock_001"
+                android:scaleType="fitXY"
+                android:background="@null"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+
+            <TextView
+                android:id="@+id/signUpFragment_login_method_password_image_text"
+                android:text="by PASSWORD"
+                android:textStyle="bold"
+                android:textColor="@color/sexyBlack"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

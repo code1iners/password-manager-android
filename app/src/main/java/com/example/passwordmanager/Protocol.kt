@@ -9,13 +9,16 @@ object Protocol {
     const val REQUEST_CODE_ADD_ACCOUNT = 1004
     const val REQUEST_CODE_GALLERY_PHOTO = 2000
 
-    // note.
+    // note. int values
+    const val UNIQUE_KEY_LENGTH = 40
+
+    // note. str values
     const val NULL = "null"
     const val EMPTY = ""
     const val BACK = "BACK"
     const val CREATE = "CREATE"
     const val MODIFY = "MODIFY"
-    const val UNIQUE_KEY_LENGTH = 40
+    const val IS_USER = "IS_USER"
     const val USER_PROFILE = "USER_PROFILE"
     const val USER_NICKNAME = "USER_NICKNAME"
     const val USER_THUMBNAIL = "USER_THUMBNAIL"

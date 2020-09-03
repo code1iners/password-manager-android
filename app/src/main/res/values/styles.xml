@@ -26,4 +26,12 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
     </style>
+
+    <!-- note. Tab layout -->
+    <style name="LoginActivityTabLayoutStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#80FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

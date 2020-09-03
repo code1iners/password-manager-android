@@ -3,159 +3,217 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/sexyBlack"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.LoginActivity">
 
-    <RelativeLayout
-        android:alpha="0.7"
-        android:background="@drawable/login_image_001"
+    <ImageView
+        android:id="@+id/loginActivity__header_main_logo"
+        android:src="@drawable/dog_001"
+        android:scaleType="fitXY"
+        android:background="@null"
+        android:layout_marginTop="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+
+    <LinearLayout
+        android:layout_below="@+id/loginActivity__header_main_logo"
+        android:layout_marginVertical="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:background="@drawable/border_15_black2"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/loginActivity__header_container"
-        android:layout_marginTop="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/loginActivity__header_title"
-            android:text="Sign in"
-            android:textSize="60sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/loginActivity__header_subtitle"
-            android:text="Sign In Manager Your Account"
-            android:textSize="26sp"
-            android:layout_below="@+id/loginActivity__header_title"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/loginActivity__body__container"
-        android:layout_below="@+id/loginActivity__header_container"
-        android:layout_marginTop="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:id="@+id/loginActivity__body__input_id_container"
-            android:visibility="gone"
-            android:layout_marginVertical="10dp"
-            android:layout_marginHorizontal="40dp"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/loginActivityLoginView_tab_conatiner"
+            android:paddingVertical="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            app:tabPaddingStart="15dp"
+            app:tabPaddingEnd="15dp"
+            app:tabIndicatorColor="@color/sexyRed"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorGravity="bottom"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextAppearance="@style/LoginActivityTabLayoutStyle">
 
-            <ImageView
-                android:id="@+id/loginActivity__body__input_id_icon"
-                android:layout_centerVertical="true"
-                android:src="@drawable/user_unfocus"
-                android:layout_width="40dp"
-                android:layout_height="40dp"/>
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/loginActivityLoginView_tab_item1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SIGN IN" />
 
-            <EditText
-                android:id="@+id/loginActivity__body__input_id_edit"
-                android:hint="@string/username"
-                android:textSize="24sp"
-                android:textColor="@color/black"
-                android:background="@null"
-                android:inputType="textEmailAddress"
-                android:layout_toEndOf="@+id/loginActivity__body__input_id_icon"
-                android:layout_centerVertical="true"
-                android:paddingStart="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/loginActivityLoginView_tab_item2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SIGN UP" />
 
-        </RelativeLayout>
+        </com.google.android.material.tabs.TabLayout>
 
-        <RelativeLayout
-            android:id="@+id/loginActivity__body__input_pw_container"
-            android:layout_below="@+id/loginActivity__body__input_id_container"
-            android:layout_marginVertical="10dp"
-            android:layout_marginHorizontal="40dp"
+        <FrameLayout
+            android:id="@+id/loginActivityLoginView_tab_item_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/loginActivity__body__input_pw_icon"
-                android:src="@drawable/lock_unfocus"
-                android:layout_centerVertical="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp"/>
-
-            <EditText
-                android:id="@+id/loginActivity__body__input_pw_edit"
-                android:hint="Password"
-                android:textSize="24sp"
-                android:textColor="@color/black"
-                android:background="@null"
-                android:inputType="textPassword"
-                android:imeOptions="actionDone"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/loginActivity__body__input_pw_icon"
-                android:paddingStart="30dp"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent"
+                android:alpha="0.7"
+                android:background="@color/sexyBlack">
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-    </RelativeLayout>
+        </FrameLayout>
 
-    <RelativeLayout
-        android:id="@+id/loginActivity__footer__container"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/loginActivity__footer__btn1_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/loginActivity__header_container"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
 
-            <Button
-                android:id="@+id/loginActivity__footer__btn1_signIn"
-                android:text="@string/sign_in"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:background="@drawable/gradation_sign_in"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+<!--        <TextView-->
+<!--            android:id="@+id/loginActivity__header_title"-->
+<!--            android:text="Sign in"-->
+<!--            android:textSize="60sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"/>-->
 
-        </LinearLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/loginActivity__header_subtitle"-->
+<!--            android:text="Sign In Manager Your Account"-->
+<!--            android:textSize="26sp"-->
+<!--            android:layout_below="@+id/loginActivity__header_title"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"/>-->
 
-        <LinearLayout
-            android:id="@+id/loginActivity__footer__btn2_container"
-            android:layout_below="@+id/loginActivity__footer__btn1_container"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+<!--    </RelativeLayout>-->
 
-            <Button
-                android:id="@+id/loginActivity__footer__btn1_signUp"
-                android:text="Sign Up"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:background="@drawable/gradation_sign_up"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/loginActivity__body__container"-->
+<!--        android:layout_below="@+id/loginActivity__header_container"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
 
-        </LinearLayout>
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/loginActivity__body__input_id_container"-->
+<!--            android:visibility="gone"-->
+<!--            android:layout_marginVertical="10dp"-->
+<!--            android:layout_marginHorizontal="40dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
 
-    </RelativeLayout>
+<!--            <ImageView-->
+<!--                android:id="@+id/loginActivity__body__input_id_icon"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:src="@drawable/user_unfocus"-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"/>-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/loginActivity__body__input_id_edit"-->
+<!--                android:hint="@string/username"-->
+<!--                android:textSize="24sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:background="@null"-->
+<!--                android:inputType="textEmailAddress"-->
+<!--                android:layout_toEndOf="@+id/loginActivity__body__input_id_icon"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:paddingStart="30dp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"/>-->
+
+<!--        </RelativeLayout>-->
+
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/loginActivity__body__input_pw_container"-->
+<!--            android:layout_below="@+id/loginActivity__body__input_id_container"-->
+<!--            android:layout_marginVertical="10dp"-->
+<!--            android:layout_marginHorizontal="40dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/loginActivity__body__input_pw_icon"-->
+<!--                android:src="@drawable/lock_unfocus"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"/>-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/loginActivity__body__input_pw_edit"-->
+<!--                android:hint="Password"-->
+<!--                android:textSize="24sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:background="@null"-->
+<!--                android:inputType="textPassword"-->
+<!--                android:imeOptions="actionDone"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:layout_toEndOf="@+id/loginActivity__body__input_pw_icon"-->
+<!--                android:paddingStart="30dp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"/>-->
+
+<!--        </RelativeLayout>-->
+
+<!--    </RelativeLayout>-->
+
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/loginActivity__footer__container"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginHorizontal="20dp"-->
+<!--        android:layout_marginBottom="20dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/loginActivity__footer__btn1_container"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <Button-->
+<!--                android:id="@+id/loginActivity__footer__btn1_signIn"-->
+<!--                android:text="@string/sign_in"-->
+<!--                android:textSize="25sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:background="@drawable/gradation_sign_in"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"/>-->
+
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/loginActivity__footer__btn2_container"-->
+<!--            android:layout_below="@+id/loginActivity__footer__btn1_container"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <Button-->
+<!--                android:id="@+id/loginActivity__footer__btn1_signUp"-->
+<!--                android:text="Sign Up"-->
+<!--                android:textSize="25sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:background="@drawable/gradation_sign_up"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"/>-->
+
+<!--        </LinearLayout>-->
+
+<!--    </RelativeLayout>-->
 
 </RelativeLayout>

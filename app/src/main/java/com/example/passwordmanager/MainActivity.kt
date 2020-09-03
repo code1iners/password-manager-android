@@ -25,6 +25,7 @@ import com.example.helpers.ScreenManager
 import com.example.passwordmanager.Protocol.ACCOUNT_DATA
 import com.example.passwordmanager.Protocol.ACCOUNT_LIST
 import com.example.passwordmanager.Protocol.CLIENT_PW
+import com.example.passwordmanager.Protocol.IS_USER
 import com.example.passwordmanager.Protocol.USER_NICKNAME
 import com.example.passwordmanager.Protocol.USER_PROFILE
 import com.example.passwordmanager.Protocol.USER_THUMBNAIL
@@ -72,7 +73,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         // note. check has arguments
         checkArgs()
         // note. if no has user info, showing login view
-        if (!isUser) displayLoginView()
+//        if (!isUser) displayLoginView()
+        displayLoginView()
         // note. apply info
         applyView()
         // note. get user account list
@@ -84,7 +86,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         // note. user nickname
         mainActivity__header__item_nickname.text = clientNickname
         // note. use thumbnail
-        Glide.with(context).load(clientThumbnail).apply(GlideOptions.centerCropAndCircleCrop()).into(mainActivity__header__item_mySetting)
+        if (clientThumbnail.isNullOrBlank()) Glide.with(context).load(resources.getDrawable(R.drawable.user_004)).apply(GlideOptions.centerCropAndCircleCrop()).into(mainActivity__header__item_mySetting)
+        else Glide.with(context).load(clientThumbnail).apply(GlideOptions.centerCropAndCircleCrop()).into(mainActivity__header__item_mySetting)
     }
 
     private fun refreshAccountList() {
@@ -104,13 +107,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
     private fun checkArgs() {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
-        val manager = PreferencesManager(activity, Protocol.USER_PROFILE)
+        val manager = PreferencesManager(activity, USER_PROFILE)
         clientPw = manager[CLIENT_PW]
         clientNickname = manager[USER_NICKNAME]
         clientThumbnail = manager[USER_THUMBNAIL]
 
         Timber.i("clientPw:$clientPw, clientNickname:$clientNickname, clientThumbnail:$clientThumbnail")
-        if (clientThumbnail.isNullOrEmpty()) Snackbar.make(mainActivity__container, "프로필 이미지 파일을 찾을 수 없습니다.", Snackbar.LENGTH_LONG).show()
+//        if (clientThumbnail.isNullOrEmpty()) Snackbar.make(mainActivity__container, "프로필 이미지 파일을 찾을 수 없습니다.", Snackbar.LENGTH_LONG).show()
         if (clientPw == null) isUser = false
         Timber.i("isUser:$isUser")
     }
@@ -119,6 +122,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
 
         val loginView = Intent(context, LoginActivity::class.java)
+        loginView.putExtra(IS_USER, isUser.toString())
         startActivityForResult(loginView, Protocol.REQUEST_CODE_LOGIN_ACTIVITY)
     }
 
