@@ -21,6 +21,7 @@ import com.example.passwordmanager.Protocol
 import com.example.passwordmanager.Protocol.COMMAND
 import com.example.passwordmanager.Protocol.EMPTY
 import com.example.passwordmanager.Protocol.REQUEST_CODE_GALLERY_PHOTO
+import com.example.passwordmanager.Protocol.SIGN_OUT
 import com.example.passwordmanager.Protocol.SUCCESS
 import com.example.passwordmanager.Protocol.USER_NICKNAME
 import com.example.passwordmanager.Protocol.USER_PROFILE
@@ -164,7 +165,7 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
                             Timber.w("YES, interface:$dialogInterface, i:$i")
                             val myActivityResult = Intent()
                             setResult(RESULT_OK, myActivityResult)
-                            myActivityResult.putExtra(Protocol.COMMAND, Protocol.SIGN_OUT)
+                            myActivityResult.putExtra(COMMAND, SIGN_OUT)
                             finish()
                         }
                         .setNegativeButton("취소") { dialogInterface: DialogInterface, i: Int ->
@@ -178,9 +179,11 @@ class MyActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorA
 
             R.id.myActivity__footer__btn_save -> {
                 try {
+
                     // note. declared and assignment in var
                     val nickname = myActivity__body__nickname_edit.text.toString()
-                    var thumbnail = if (thumbnailFilePath.isNullOrBlank()) thumbnailFilePath else EMPTY
+                    var thumbnail = if (thumbnailFilePath.isNullOrBlank()) EMPTY else thumbnailFilePath
+                    Timber.i("nickname:$nickname, thumbnail:$thumbnail")
                     // note. apply nickname field
                     myActivity__header__username.text = nickname
                     // note. stored nickname user's device

@@ -20,6 +20,12 @@ import com.example.helpers.Keypad
 import com.example.helpers.PreferencesManager
 import com.example.passwordmanager.MainActivity
 import com.example.passwordmanager.Protocol
+import com.example.passwordmanager.Protocol.ACCOUNT_DATA
+import com.example.passwordmanager.Protocol.ACCOUNT_LIST
+import com.example.passwordmanager.Protocol.CLIENT_PW
+import com.example.passwordmanager.Protocol.USER_NICKNAME
+import com.example.passwordmanager.Protocol.USER_PROFILE
+import com.example.passwordmanager.Protocol.USER_THUMBNAIL
 import com.example.passwordmanager.R
 import com.example.passwordmanager.ui.LoginActivity.Companion.isUser
 import timber.log.Timber
@@ -131,7 +137,15 @@ class LoginSignUpFragment : Fragment(), View.OnClickListener, TextView.OnEditorA
                 choiceIsDone.isBoo = true
             }
             b.setPositiveButton("확인") { _, _ ->
-                PreferencesManager(mActivity, Protocol.USER_PROFILE).remove(Protocol.CLIENT_PW)
+
+                val profile = PreferencesManager(mActivity, USER_PROFILE)
+                profile.remove(CLIENT_PW)
+                profile.remove(USER_THUMBNAIL)
+                profile.remove(USER_NICKNAME)
+
+                val accountList = PreferencesManager(mActivity, ACCOUNT_DATA)
+                accountList.remove(ACCOUNT_LIST)
+
                 choiceResult = true
                 choiceIsDone.isBoo = true
             }

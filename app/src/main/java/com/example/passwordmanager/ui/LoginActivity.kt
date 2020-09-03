@@ -11,12 +11,10 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Log
 import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
@@ -26,7 +24,9 @@ import com.example.helpers.PreferencesManager
 import com.example.helpers.ScreenManager
 import com.example.passwordmanager.MainActivity
 import com.example.passwordmanager.Protocol
+import com.example.passwordmanager.Protocol.COMMAND
 import com.example.passwordmanager.Protocol.IS_USER
+import com.example.passwordmanager.Protocol.SIGN_UP_SUCCESS
 import com.example.passwordmanager.R
 import com.google.android.material.tabs.TabLayout
 import timber.log.Timber
@@ -66,8 +66,50 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdit
 
         checkArgs()
         init()
-        display(SIGN_IN)
-        if (isUser) loginWithBio()
+        filter()
+    }
+
+    private fun filter() {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+
+        if (isUser) {
+            tabSelect(SIGN_IN)
+            loginWithBio()
+        }
+        else {
+            tabDisable(SIGN_IN)
+            tabSelect(SIGN_UP)
+        }
+    }
+
+    private fun tabDisable(tab: Int) {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            val tabStrip = loginActivityLoginView_tab_conatiner.getChildAt(tab) as LinearLayout
+
+            tabStrip.getChildAt(tab).isClickable = false
+            tabStrip.getChildAt(tab).isEnabled = false
+
+        } catch (e: Exception) {e.printStackTrace()}
+    }
+
+    private fun tabEnable(tab: Int) {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            val tabStrip = loginActivityLoginView_tab_conatiner.getChildAt(tab) as LinearLayout
+
+            tabStrip.getChildAt(tab).isClickable = true
+            tabStrip.getChildAt(tab).isEnabled = true
+
+        } catch (e: Exception) {e.printStackTrace()}
+    }
+
+    private fun tabSelect(tab: Int) {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+            loginActivityLoginView_tab_conatiner.getTabAt(tab)!!.select()
+
+        } catch (e: Exception) {e.printStackTrace()}
     }
 
     private fun checkArgs() {
@@ -146,6 +188,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdit
 
     private fun display(status: Int) {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        Timber.i("status:$status")
         when (status) {
             SIGN_IN -> {
                 FragmentChanger.replace(supportFragmentManager, bodyContainer, loginSignInFragment, false, null)
@@ -185,7 +228,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdit
 //                            .show()
 
                         Timber.i("result:$result")
-                        finish()
+
+                        loginSuccess()
                     }
 
                     override fun onAuthenticationFailed() {
@@ -278,11 +322,17 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdit
                 Timber.i("Password does exist!")
                 val inputPassword = loginSignInFragment.signInFragment_login_password_edit.text.toString()
 
-                if (pw == inputPassword) {
-                    finish()
-                }
+                if (pw == inputPassword) loginSuccess() else Toast.makeText(context, "비밀번호가 올바르지 않습니다.", Toast.LENGTH_SHORT).show()
             } else Timber.w("Password does not exist!")
         } catch (e: Exception) {e.printStackTrace()}
+    }
+
+    private fun loginSuccess() {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        val intent = Intent()
+        intent.putExtra(COMMAND, SIGN_UP_SUCCESS)
+        setResult(RESULT_OK, intent)
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -293,10 +343,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdit
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 Protocol.REQUEST_CODE_JOIN_ACTIVITY -> {
-                    val intent = Intent()
-                    intent.putExtra(Protocol.COMMAND, Protocol.SIGN_UP_SUCCESS)
-                    setResult(RESULT_OK, intent)
-                    finish()
+                    loginSuccess()
                 }
             }
         }
@@ -340,6 +387,16 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdit
     override fun onTabReselected(tab: TabLayout.Tab) {
         Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
         Timber.i("tab:${tab.text}")
+        when (tab.text) {
+            "SIGN IN" -> {
+                display(SIGN_IN)
+
+            }
+
+            "SIGN UP" -> {
+                display(SIGN_UP)
+            }
+        }
     }
 
     companion object {

@@ -24,8 +24,19 @@ import com.example.helpers.PreferencesManager
 import com.example.helpers.ScreenManager
 import com.example.passwordmanager.Protocol.ACCOUNT_DATA
 import com.example.passwordmanager.Protocol.ACCOUNT_LIST
+import com.example.passwordmanager.Protocol.APP_TERMINATE
 import com.example.passwordmanager.Protocol.CLIENT_PW
+import com.example.passwordmanager.Protocol.COMMAND
+import com.example.passwordmanager.Protocol.EMPTY
 import com.example.passwordmanager.Protocol.IS_USER
+import com.example.passwordmanager.Protocol.REQUEST_CODE_ADD_ACCOUNT
+import com.example.passwordmanager.Protocol.REQUEST_CODE_EXIT
+import com.example.passwordmanager.Protocol.REQUEST_CODE_JOIN_ACTIVITY
+import com.example.passwordmanager.Protocol.REQUEST_CODE_LOGIN_ACTIVITY
+import com.example.passwordmanager.Protocol.REQUEST_CODE_MY_ACTIVITY
+import com.example.passwordmanager.Protocol.SIGN_OUT
+import com.example.passwordmanager.Protocol.SIGN_UP_SUCCESS
+import com.example.passwordmanager.Protocol.SUCCESS
 import com.example.passwordmanager.Protocol.USER_NICKNAME
 import com.example.passwordmanager.Protocol.USER_PROFILE
 import com.example.passwordmanager.Protocol.USER_THUMBNAIL
@@ -114,7 +125,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
 
         Timber.i("clientPw:$clientPw, clientNickname:$clientNickname, clientThumbnail:$clientThumbnail")
 //        if (clientThumbnail.isNullOrEmpty()) Snackbar.make(mainActivity__container, "프로필 이미지 파일을 찾을 수 없습니다.", Snackbar.LENGTH_LONG).show()
-        if (clientPw == null) isUser = false
+        isUser = clientPw != null
         Timber.i("isUser:$isUser")
     }
 
@@ -123,7 +134,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
 
         val loginView = Intent(context, LoginActivity::class.java)
         loginView.putExtra(IS_USER, isUser.toString())
-        startActivityForResult(loginView, Protocol.REQUEST_CODE_LOGIN_ACTIVITY)
+        startActivityForResult(loginView, REQUEST_CODE_LOGIN_ACTIVITY)
     }
 
     private fun init() {
@@ -237,42 +248,54 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         try {
             if (resultCode == RESULT_OK) {
                 when (requestCode) {
-                    Protocol.REQUEST_CODE_LOGIN_ACTIVITY -> {
+                    REQUEST_CODE_LOGIN_ACTIVITY -> {
                         val command = data?.getStringExtra(Protocol.COMMAND)
                         Timber.i("command:$command")
 
                         // note. terminate application
                         when (command) {
-                            Protocol.APP_TERMINATE -> {finish()}
+                            APP_TERMINATE -> {finish()}
+                            SIGN_UP_SUCCESS -> {
+                                // note. check has arguments
+                                checkArgs()
+                                // note. apply info
+                                applyView()
+                                // note. get user account list
+                                refreshAccountList()
+                            }
                         }
 
                     }
 
-                    Protocol.REQUEST_CODE_JOIN_ACTIVITY -> {
+                    REQUEST_CODE_JOIN_ACTIVITY -> {
 
                     }
 
-                    Protocol.REQUEST_CODE_MY_ACTIVITY -> {
-                        val command = data?.getStringExtra(Protocol.COMMAND)
+                    REQUEST_CODE_MY_ACTIVITY -> {
+                        val command = data?.getStringExtra(COMMAND)
                         when (command) {
-                            Protocol.SIGN_OUT -> {
+                            SIGN_OUT -> {
                                 val mainActivity = activity
 
                                 val userData = PreferencesManager(mainActivity, USER_PROFILE)
                                 userData.remove(USER_NICKNAME)
                                 userData.remove(CLIENT_PW)
+                                userData.remove(USER_THUMBNAIL)
 
                                 val accountData = PreferencesManager(mainActivity, ACCOUNT_DATA)
                                 accountData.remove(ACCOUNT_LIST)
 
                                 // note. update(init) text
-                                mainActivity__header__item_nickname.text = Protocol.EMPTY
+                                mainActivity__header__item_nickname.text = EMPTY
+
+                                // note. loss user
+                                isUser = false
 
                                 displayLoginView()
                             }
 
-                            Protocol.SUCCESS -> {
-                                val command = data.getStringExtra(Protocol.COMMAND)
+                            SUCCESS -> {
+                                val command = data.getStringExtra(COMMAND)
                                 when (command) {
                                     Protocol.SUCCESS -> {
                                         val nickname = data.getStringExtra(USER_NICKNAME)
@@ -294,11 +317,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
                         }
                     }
 
-                    Protocol.REQUEST_CODE_ADD_ACCOUNT -> {
-                        val command = data?.getStringExtra(Protocol.COMMAND)
+                    REQUEST_CODE_ADD_ACCOUNT -> {
+                        val command = data?.getStringExtra(COMMAND)
                         Timber.i("command:$command")
                         when (command) {
-                            Protocol.SUCCESS -> {
+                            SUCCESS -> {
                                 try {
                                     refreshAccountList()
                                 } catch (e: Exception) {e.printStackTrace()}
@@ -310,7 +333,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
                         }
                     }
 
-                    Protocol.REQUEST_CODE_EXIT -> finish()
+                    REQUEST_CODE_EXIT -> finish()
                 }
             }
         } catch (e: Exception) {e.printStackTrace()}
