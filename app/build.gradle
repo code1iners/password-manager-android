@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.passwordmanager"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -43,7 +43,7 @@ dependencies {
 //    // note. For control over item selection of both touch and mouse driven selection
 //    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
     // note. helpers
-    implementation 'com.github.takeMyHands:helpers-android:0.1.34'
+    implementation 'com.github.takeMyHands:helpers-android:0.1.36'
     // note. snack bar
     implementation 'com.android.support:design:29.0.0'
     // note. timber
@@ -57,5 +57,10 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     // note. bio metric
     implementation "androidx.biometric:biometric:1.0.1"
+    // note. retrofit
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+
 
 }

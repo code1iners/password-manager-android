@@ -4,8 +4,9 @@
     package="com.example.passwordmanager">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="andsroid.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:requestLegacyExternalStorage="true"
@@ -15,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_main_dog_001_round"
         android:supportsRtl="true"
         android:theme="@style/NoActionBar"
+        android:usesCleartextTraffic="true"
         tools:targetApi="q">
         <activity android:name=".ui.AccountAddActivity"
             android:theme="@style/Theme.Transparent"/>

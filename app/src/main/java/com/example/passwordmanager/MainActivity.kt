@@ -3,6 +3,9 @@ package com.example.passwordmanager
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
@@ -20,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.helpers.GlideOptions
+import com.example.helpers.PasswordGenerator
 import com.example.helpers.PreferencesManager
 import com.example.helpers.ScreenManager
 import com.example.passwordmanager.Protocol.ACCOUNT_DATA
@@ -28,6 +32,7 @@ import com.example.passwordmanager.Protocol.APP_TERMINATE
 import com.example.passwordmanager.Protocol.CLIENT_PW
 import com.example.passwordmanager.Protocol.COMMAND
 import com.example.passwordmanager.Protocol.EMPTY
+import com.example.passwordmanager.Protocol.ERROR
 import com.example.passwordmanager.Protocol.IS_USER
 import com.example.passwordmanager.Protocol.REQUEST_CODE_ADD_ACCOUNT
 import com.example.passwordmanager.Protocol.REQUEST_CODE_EXIT
@@ -40,18 +45,29 @@ import com.example.passwordmanager.Protocol.SUCCESS
 import com.example.passwordmanager.Protocol.USER_NICKNAME
 import com.example.passwordmanager.Protocol.USER_PROFILE
 import com.example.passwordmanager.Protocol.USER_THUMBNAIL
+import com.example.passwordmanager.Protocol.WARNING
 import com.example.passwordmanager.adapters.AccountAdapter
 import com.example.passwordmanager.helpers.AccountInfoManager
 import com.example.passwordmanager.helpers.ItemTouchHelperCallback
+import com.example.passwordmanager.helpers.SwitchService
+import com.example.passwordmanager.helpers.SwitchServiceProvider
 import com.example.passwordmanager.models.AccountModel
 import com.example.passwordmanager.ui.AccountAddActivity
 import com.example.passwordmanager.ui.LoginActivity
 import com.example.passwordmanager.ui.MyActivity
-import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.jakewharton.threetenabp.AndroidThreeTen
-import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
+import javax.crypto.KeyGenerator
 import kotlin.system.exitProcess
 
 
@@ -61,6 +77,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
     private lateinit var context: Context
     private lateinit var backgrounds: Array<Drawable>
     var animDeleteLeft: Animation? = null
+
+    // note. retrofit test
+    lateinit var mRetrofit: Retrofit
+    lateinit var switchService: SwitchService
 
     // note. widgets
     // note. user info
@@ -81,6 +101,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
 
         // note. init
         init()
+        // note. check api
+        receiveFromServer()
         // note. check has arguments
         checkArgs()
         // note. if no has user info, showing login view
@@ -90,6 +112,56 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
         applyView()
         // note. get user account list
         refreshAccountList()
+    }
+
+    private fun receiveFromServer() {
+        Timber.w(object:Any(){}.javaClass.enclosingMethod!!.name)
+        try {
+
+            Timber.i("packageName:${packageName}")
+            val obj = JSONObject()
+            try {
+                obj.put("name", "잊지말개")
+                obj.put("package_name", packageName)
+                obj.put("secret_key", resources.getString(R.string.secret_key))
+                obj.put("description", "비밀번호 관리 앱")
+                obj.put("is_powered", true)
+            } catch (e: Exception) {e.printStackTrace()}
+
+            switchService.appsListPost(JsonParser().parse(obj.toString()) as JsonObject).enqueue(object: Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, r: Response<JsonObject>) {
+                    if (r.isSuccessful) {
+                        Timber.i("appsListPost($SUCCESS):${r.code()}\n${r.message()}")
+                    } else Timber.w("appsListPost($WARNING):${r.code()}\n${r.message()}")
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Timber.e("appsListPost($ERROR):${t.message}")
+                }
+
+            })
+
+//            switchService.appsListRead().enqueue(object: Callback<JsonArray> {
+//                override fun onResponse(call: Call<JsonArray>, r: Response<JsonArray>) {
+//                    if (r.isSuccessful) {
+//                        Timber.i("getAppsList($SUCCESS):${r.code()}\n${r.message()}")
+//                        val result = r.body()
+//                        for (idx in 0 until result!!.size()) {
+//                            Timber.v("${result[idx].asJsonObject.get("name").asString}")
+//                        }
+//                    } else Timber.w("getAppsList($WARNING):${r.code()}\n${r.message()}")
+//                }
+//
+//                override fun onFailure(call: Call<JsonArray>, t: Throwable) {
+//                    Timber.e("getAppsList($ERROR):${t.message}")
+//                }
+//
+//            })
+        } catch (e: Exception) {e.printStackTrace()}
+    }
+
+    private fun initRetrofit() {
+
     }
 
     private fun applyView() {
@@ -176,6 +248,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AccountAdapter.A
             context.resources.getDrawable(R.drawable.gradation_item09),
             context.resources.getDrawable(R.drawable.gradation_item10)
         )
+
+        // note. init api service
+        switchService = SwitchServiceProvider.getProvider(context)
     }
 
     private fun initLibraries() {

@@ -28,4 +28,8 @@
     <string name="filePath">파일 경로</string>
     <string name="value">Value</string>
 
+    <!-- note. Switch Service -->
+    <string name="switch_api_server_url">http://121.130.15.124:9090/</string>
+    <string name="secret_key">d3FfeHw1B22F@RRuSrDdRS6DQ@CrUQmza7dz$Gkun$^rNRcj^DQB1k5kwTu9</string>
+
 </resources>

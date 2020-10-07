@@ -301,7 +301,7 @@ class AccountAddActivity : AppCompatActivity(), View.OnClickListener, View.OnLon
                 }
                 // note. search thumbnail
                 R.id.accountAddActivity__body__account_icon_search -> {
-                    if (PermissionManager.checkPermissionSimply(activity, accountAddActivity__container, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    if (PermissionManager.checkPermissionSimply(activity, accountAddActivity__container, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                         startActivityForResult(Intent(Intent.ACTION_PICK).setType("image/*"), REQUEST_CODE_GALLERY_PHOTO)
                     }
                 }
